@@ -1,0 +1,1364 @@
+%     THE PROGRAMMING LANGUAGE SUPERPASCAL
+%              PER BRINCH HANSEN
+%  School of Computer and Information Science
+% Syracuse University, Syracuse, NY 13244, USA
+%              10 November 1993
+%     Copyright(c) 1993 Per Brinch Hansen
+
+% LATEX PREAMBLE
+% For 11pt, 1em = 3.83mm
+\documentstyle[twoside,11pt]{article}
+\pagestyle{myheadings}
+\setlength{\topmargin}{7mm}
+\setlength{\textheight}{200mm}
+\setlength{\textwidth}{140mm}
+\setlength{\oddsidemargin}{14mm}
+\setlength{\evensidemargin}{12mm}
+\newcommand{\acknowledgements}
+  {\section*{Acknowledgements}
+   \addcontentsline{toc}{section}
+     {Acknowledgements}
+  }
+\newcommand{\blank}
+  {\mbox{\hspace{1.8em}}}
+\newcommand{\blankline}
+  {\medskip}
+\newcommand{\Copyright}
+  {Copyright {\copyright}}
+\newcommand{\entry}
+  {\bibitem{}}
+\newcommand{\example}
+  {{\it Example:}}
+\newcommand{\examples}
+  {{\it Examples:}}
+\newcommand{\mytitle}[3]
+% [title,month,year]
+  {\markboth{Per Brinch Hansen}{#1}
+   \thispagestyle{empty}
+   \begin{center}
+     {\Large\bf #1}\\
+     % TITLE    
+     \blankline
+       PER BRINCH HANSEN
+     \footnote{
+       \Copyright #3 % Year
+       Per Brinch Hansen. All rights reserved.}\\
+     \blankline
+     {\it
+       School of Computer and Information Science  \\
+       Syracuse University, Syracuse, NY 13244, USA\\
+     }
+     \blankline
+     #2 #3\\
+     %  Month Year
+   \end{center}
+  }
+\newcommand{\Superpascal}
+  {\it SuperPascal}
+\newenvironment{grammar}
+  {\begin{small}}
+  {\end{small}}
+\newenvironment{myabstract}
+  {\begin{rm}
+     \noindent{\bf Abstract:}}
+  {\end{rm}}
+\newenvironment{mybibliography}[1]
+% [widestlabel]
+  {\begin{small}
+    \begin{thebibliography}{#1}
+      \addcontentsline{toc}
+        {section}{References}}
+  {  \end{thebibliography}
+   \end{small}}
+\newenvironment{mykeywords}
+  {\begin{small}
+     \noindent{\bf Key Words:}}
+  {\end{small}}
+\newenvironment{mytabular}[1]
+% [columns]
+  {\begin{small}
+     \begin{center}
+       \begin{tabular}{#1}}
+  {    \end{tabular}
+     \end{center}
+   \end{small}}
+\newenvironment{program}[1]
+% [width]
+  {\begin{center}
+     \begin{minipage}{#1}}
+  {  \end{minipage}
+   \end{center}}
+% Program Tokens
+\newcommand{\token}[1]
+  {{\bf#1}}
+\newcommand{\And}
+  {\token{and}}
+\newcommand{\Array}
+  {\token{array}}
+\newcommand{\Assume}
+  {\token{assume}}
+\newcommand{\Begin}
+  {\token{begin}}
+\newcommand{\Case}
+  {\token{case}}
+\newcommand{\Const}
+  {\token{const}}
+\newcommand{\Div}
+  {\token{div}}
+\newcommand{\Do}
+  {\token{do}}
+\newcommand{\Downto}
+  {\token{downto}}
+\newcommand{\Else}
+  {\token{else}}
+\newcommand{\End}
+  {\token{end}}
+\newcommand{\For}
+  {\token{for}}
+\newcommand{\Forall}
+  {\token{forall}}
+\newcommand{\Function}
+  {\token{function}}
+\newcommand{\If}
+  {\token{if}}
+\newcommand{\Mod}
+  {\token{mod}}
+\newcommand{\Not}
+  {\token{not}}
+\newcommand{\Of}
+  {\token{of}}
+\newcommand{\Or}
+  {\token{or}}
+\newcommand{\Parallel}
+  {\token{parallel}}
+\newcommand{\Procedure}
+  {\token{procedure}}
+\newcommand{\Program}
+  {\token{program}}
+\newcommand{\Record}
+  {\token{record}}
+\newcommand{\Repeat}
+  {\token{repeat}}
+\newcommand{\Sic}
+  {\token{sic}}
+\newcommand{\Then}
+  {\token{then}}
+\newcommand{\To}
+  {\token{to}}
+\newcommand{\Type}
+  {\token{type}}
+\newcommand{\Until}
+  {\token{until}}
+\newcommand{\Var}
+  {\token{var}}
+\newcommand{\While}
+  {\token{while}}
+% Program Indentation
+\newcommand{\PA}
+  {\noindent}
+\newcommand{\PB}
+  {\mbox{\hspace{1em}}}
+\newcommand{\PC}
+  {\mbox{\hspace{2em}}}
+\newcommand{\PD}
+  {\mbox{\hspace{3em}}}
+\newcommand{\PE}
+  {\mbox{\hspace{4em}}}
+% Grammar Indentation
+\newcommand{\GA}
+  {\noindent}
+\newcommand{\GB}
+  {\mbox{\hspace{1.6em}}}
+\newcommand{\GC}
+  {\mbox{\hspace{3.2em}}}
+\newcommand{\GD}
+  {\mbox{\hspace{4.8em}}}
+\hyphenation{
+  syn-chron-ous
+}
+% DOCUMENT TEXT
+\begin{document}
+
+\mytitle
+  {The Programming Language SuperPascal}
+  {November}{1993}
+
+\begin{myabstract}
+  This paper defines {\Superpascal}---a secure programming
+  language for publication of parallel scientific
+  algorithms. {\Superpascal} extends a subset of IEEE Standard
+  Pascal with deterministic statements for parallel
+  processes and synchronous message communication. A parallel
+  statement denotes parallel execution of a fixed number of
+  statements. A {\it forall} statement denotes parallel execution
+  of the same statement by a dynamic number of processes.
+  Recursive procedures may be combined with parallel and {\it
+  forall} statements to define recursive parallel processes.
+  Parallel processes communicate by sending typed messages
+  through channels created dynamically. {\Superpascal} omits
+  ambiguous and insecure features of Pascal. Restrictions on
+  the use of variables enable a single-pass compiler to check
+  that parallel processes are disjoint, even if the processes
+  use procedures with global variables.
+\end{myabstract}
+
+\blankline
+
+\begin{mykeywords}
+  Programming languages, Parallel programming, Recursive
+  parallelism, Synchronous communication, SuperPascal.
+\end{mykeywords}
+
+%\tableofcontents
+
+
+\section{Introduction}
+
+This paper defines {\Superpascal}---a secure programming
+language for publication of parallel scientific algorithms.
+{\Superpascal} extends a subset of IEEE Standard Pascal with
+deterministic statements for parallel processes and
+synchronous message communication. A parallel statement
+denotes parallel execution of a fixed number of statements.
+A {\it forall} statement denotes parallel execution of the
+same statement by a dynamic number of processes. Recursive
+procedures may be combined with parallel and {\it forall}
+statements to define recursive parallel processes. Parallel
+processes communicate by sending typed message through
+channels created dynamically. {\Superpascal} omits ambiguous
+and insecure features of Pascal. Restrictions on the use of
+variables enable a single-pass compiler to check that
+parallel processes are disjoint, even if the processes use
+procedures with global variables.
+
+This paper defines the parallel features of {\Superpascal}
+using the terminology and syntax notation of the Standard
+Pascal report [IEEE 1983]. Brinch Hansen [1993a]
+illustrates {\Superpascal} by examples. The syntactic
+checking of parallel statements is discussed further in
+[Brinch Hansen 1993b].
+
+A {\it portable implementation} of {\Superpascal} has been
+developed on a Sun workstation under Unix. It consists of
+a compiler and an interpreter written in Pascal. To obtain
+the {\Superpascal} software, use anonymous FTP from the
+directory {\it pbh} at {\it top.cis.syr.edu}.
+
+
+\section{Processes and Variables}
+
+\begin{grammar}
+  {\GA}command =                           \\
+    {\GB}variable-access $|$ expression $|$
+         statement $|$ statement-sequence .
+\end{grammar}
+
+The evaluation or execution of a {\it command} is called a
+{\it process}. A structured process is a sequential or
+parallel composition of processes. The components of a
+parallel composition are called {\it parallel processes}.
+They proceed independently at unpredictable speeds until all
+of them have terminated.
+
+In a program text an {\it entire variable} is a syntactic
+entity that has an identifier, a type, and a scope.
+
+During program execution a {\it block} is activated when a
+process evaluates a function designator or executes a
+procedure statement or program. Every activation of a block
+$B$ creates a new instance of every variable that is local
+to $B$. When an activation terminates, the corresponding
+variable instances cease to exist.
+
+During recursive and parallel activations of a block,
+multiple instances of the local variables exist. Each
+variable instance is a dynamic entity that has a location, a
+current value, and a finite lifetime in memory.
+
+The distinction between a {\it variable} as a syntactic
+entity in the program text and a class of dynamic entities
+in memory is usually clear from the context. Where it is
+necessary, this paper distinguishes between {\it syntactic
+variables} and {\it variable instances}.
+
+Parallel processes are said to be {\it disjoint} if they
+satisfy the following condition: Any variable instance that
+is assigned a value by one of the processes is not
+accessed by any of the other processes. In other words, any
+variable instance that is accessed by more than one process
+is not assigned a value by any of the processes.
+
+
+\section{Type Definitions}
+
+Every type has an identifier. Two types are the same if they
+have the same identifier and the same scope.
+
+\blankline
+
+\examples
+
+\blankline
+
+The following types are used in the examples of this paper:
+
+\begin{program}{20.4em}
+  {\PA}{\Type}                                            \\
+    {\PB}vector = {\Record} x, y: real {\End};            \\
+    {\PB}body = {\Record} m: real; r, v, f: vector {\End};\\
+    {\PB}system = {\Array} [1..n] {\Of} body;             \\
+    {\PB}channel = $*$(body);                             \\
+    {\PB}net = {\Array} [0..p] {\Of} channel;             \\
+    {\PB}mixed = $*$(body, integer);                      \\
+    {\PB}two = {\Array} [0..1] {\Of} mixed;               \\
+    {\PB}four = {\Array} [0..1] {\Of} two;
+\end{program}
+
+
+\subsection{Channel Types}
+
+Processes communicate by means of values called {\it
+messages} transmitted through entities called {\it
+channels}. A {\it communication} takes place when one
+process is ready to {\it output} a message of some type
+through a channel and another process is ready to {\it
+input} a message of the same type through the same channel.
+
+Processes create channels dynamically and access them by
+means of values known as {\it channel references}. The type
+of a channel reference is called a {\it channel type}.
+\blankline
+\begin{grammar}
+  {\GA}channel-type =                                 \\
+    {\GB}``$*$'' ``('' message-type-list ``)'' .      \\
+  {\GA}message-type-list =                            \\
+    {\GB}type-identifier \{ ``,'' type-identifier \} .\\
+\end{grammar}
+
+A channel type
+
+\begin{center}
+  $*(T_1,T_2,\ldots,T_n)$
+\end{center}
+
+\noindent
+denotes an unordered set of channel references created
+dynamically. Each channel reference denotes a distinct
+channel which can transmit messages of distinct types
+$T_1,T_2,\ldots,T_n$ only (the {\it message types}).
+
+A type definition cannot be of the recursive form:
+
+\begin{center}
+  $T = *(\ldots,T,\ldots)$
+\end{center}
+
+\examples
+
+\begin{program}{6.9em}
+  {\PA}$*$(body)         \\
+  {\PA}$*$(body, integer)
+\end{program}
+
+
+\section{Variables}
+
+\subsection{Entire Variables}
+
+An {\it entire variable} is a variable denoted by one of the
+following kinds of identifiers:
+
+\begin{enumerate}
+  \item
+  A variable identifier introduced by a variable declaration
+  or a {\it forall} statement.
+  \item
+  A function identifier that occurs as the left part of an
+  assignment statement in the statement part of the
+  corresponding function block.
+\end{enumerate}
+
+\examples
+
+\blankline
+
+The following entire variables are used in the examples of
+this paper:
+
+\begin{program}{8.9em}
+  {\PA}{\Var}              \\
+    {\PB}inp, out: channel;\\
+    {\PB}c: net;           \\
+    {\PB}a: system;        \\
+    {\PB}ai, aj: body;     \\
+    {\PB}left: mixed;      \\
+    {\PB}top: four;        \\
+    {\PB}i, j, k: integer;
+\end{program}
+
+A {\it variable context} is associated with each command
+$C$. This context consists of two sets of entire variables
+called the {\it target} and {\it expression variables} of
+$C$. If the process denoted by $C$ may assign a value to an
+entire variable $v$ (or one of its components), then $v$ is
+a target variable of $C$. If the process may use the value
+of $v$ (or one of its components) as an operand, then $v$ is
+an expression variable of $C$.
+
+
+\subsection{Block Parameters}
+
+Consider a procedure or function block $B$ with a statement
+part $S$. An {\it implicit parameter} of $B$ is an entire
+variable $v$ that is global to $B$ and is part of the
+variable context of $S$. If $v$ is a target variable of $S$,
+then $v$ is an {\it implicit variable parameter} of $B$. If
+$v$ is an expression variable of $S$, then $v$ is an {\it
+implicit value parameter} of $B$.
+
+A {\it function} block cannot use formal variable parameters
+or implicit variable parameters.
+
+A {\it recursive procedure} or {\it function} block cannot
+use implicit parameters.
+
+
+\subsection{Target Variables}
+
+An entire variable $v$ is a target variable of a command $C$
+in the following cases:
+
+\begin{enumerate}
+  \item
+  The variable identifier $v$ occurs in an assignment
+  statement $C$ that denotes assignment to $v$ (or one of
+  its components).
+  \item
+  The variable identifier $v$ occurs in a {\it for}
+  statement $C$ that uses $v$ as the control variable.
+  \item
+  The variable identifier $v$ occurs in a procedure
+  statement $C$  that uses $v$ (or one of its components) as
+  an actual variable parameter.
+  \item
+  The variable $v$ is an implicit variable parameter of a
+  procedure block $B$, and $C$ is a procedure statement that
+  denotes activation of $B$.
+  \item
+  The variable $v$ is a target variable of a command $D$,
+  and $C$ is a structured command that contains $D$.
+\end{enumerate}
+
+
+\subsection{Expression Variables}
+
+An entire variable $v$ is an expression variable of a
+command $C$ in the following cases:
+
+\begin{enumerate}
+  \item
+  The variable identifier $v$ occurs in an expression $C$
+  that uses $v$ (or one of its components) as an operand.
+  \item
+  The variable identifier $v$ occurs in the element
+  statement $C$ of a {\it forall} statement that introduces
+  $v$ as the index variable.
+  \item
+  The variable $v$ is an implicit value parameter of a
+  function block $B$, and $C$ is a function designator that
+  denotes activation of $B$.
+  \item
+  The variable $v$ is an implicit value parameter of a
+  procedure block $B$, and $C$ is a procedure statement that
+  denotes activation of $B$.
+  \item
+  The variable $v$ is an expression variable of a command
+  $D$, and $C$ is a structured command that contains $D$.
+\end{enumerate}
+
+
+\subsection{Channel Variables}
+
+A {\it channel variable} is a variable of a channel type.
+The value of a channel variable is undefined unless a
+channel reference has been assigned to the variable.
+
+\blankline
+
+\begin{grammar}
+  {\GA}channel-variable-access = \\
+    {\GB}variable-access .       \\
+\end{grammar}
+
+\examples
+
+\begin{program}{2.9em}
+  {\PA}inp     \\
+  {\PA}c[0]    \\
+  {\PA}top[i,j]
+\end{program}
+
+
+\section{Expressions}
+
+\subsection{Channel Expressions}
+
+\begin{grammar}
+  {\GA}channel-expression =\\
+    {\GB}expression .      \\
+\end{grammar}
+
+A channel expression is an expression of a channel type. The
+expression is said to be {\it well-defined} if it denotes a
+channel; otherwise, it is {\it undefined}.
+
+\blankline
+
+\examples
+
+\begin{program}{2.4em}
+  {\PA}out     \\
+  {\PA}c[k$-$1]
+\end{program}
+
+
+\subsection{Relational Operators}
+
+If $x$ and $y$ are well-defined channel expressions of the
+same type, the following expressions denote boolean values:
+
+\begin{center}
+  x = y{\blank}x $<>$ y
+\end{center}
+
+The value of x = y is true if $x$ and $y$ denote the same
+channel, and is false otherwise. The value of x $<>$ y is
+the same as the value of
+
+\begin{center}
+  {\Not} (x = y)
+\end{center}
+
+\example
+
+\begin{center}
+  left = top[i,j]
+\end{center}
+
+
+\section{Message Communication}
+
+The required procedures for message communication are
+
+\begin{center}
+  open{\blank}send{\blank}receive
+\end{center}
+
+
+\subsection{The Procedure Open}
+
+\begin{grammar}
+  {\GA}open-statement =                              \\
+    {\GB}``{\it open}'' ``('' open-parameters ``)'' .\\
+  {\GA}open-parameters =                             \\
+    {\GB}open-parameter \{ ``,'' open-parameter \} . \\
+  {\GA}open-parameter =                              \\
+    {\GB}channel-variable-access .                   \\
+\end{grammar}
+
+If $v$ is a channel variable, the statement
+
+\begin{center}
+  open(v)
+\end{center}
+
+\noindent
+denotes creation of a new channel.
+
+The {\it open} statement is executed by creating a new
+channel and assigning the corresponding reference to the
+channel variable $v$. The channel reference is of the same
+type as the channel variable. The channel exists until the
+program execution terminates.
+
+The abbreviation  
+
+\begin{center}
+  open($v_1,v_2,\ldots,v_n$)
+\end{center}
+
+\noindent
+is equivalent to
+
+\begin{center}
+  {\Begin} open($v_1$); open($v_2,\ldots,v_n$) {\End}
+\end{center}
+
+\examples
+
+\begin{program}{6.3em}
+  {\PA}open(c[k])    \\
+  {\PA}open(inp, out)
+\end{program}
+
+
+\subsection{The Procedures Send and Receive}
+
+\begin{grammar}
+  {\GA}send-statement =                                           \\
+    {\GB}``{\it send}'' ``('' send-parameters ``)'' .             \\
+  {\GA}send-parameters =                                          \\
+    {\GB}channel-expression ``,'' output-expression-list .        \\
+  {\GA}output-expression-list =                                   \\
+    {\GB}output-expression \{ ``,'' output-expression \} .        \\
+  {\GA}output-expression =                                        \\
+    {\GB}expression .                                             \\
+  {\GA}receive-statement =                                        \\
+    {\GB}``{\it receive}'' ``('' receive-parameters ``)'' .       \\
+  {\GA}receive-parameters =                                       \\
+    {\GB}channel-expression ``,'' input-variable-list .           \\
+  {\GA}input-variable-list =                                      \\
+    {\GB}input-variable-access \{ ``,'' input-variable-access \} .\\
+  {\GA}input-variable-access =                                    \\
+    {\GB}variable-access .                                        \\
+\end{grammar}
+
+The statement
+
+\begin{center}
+  send(b, e)
+\end{center}
+
+\noindent
+denotes output of the value of an expression $e$ through
+the channel denoted by an expression $b$. The expression
+$b$ must be of a channel type $T$, and the type of the
+expression $e$ must be a message type of $T$.
+
+The statement
+
+\begin{center}
+  receive(c, v)
+\end{center}
+
+\noindent
+denotes input of the value of a variable $v$ through the
+channel denoted by an expression $c$. The expression $c$
+must be of a channel type $T$, and the type of the variable
+$v$ must be a message type of $T$.
+
+The {\it send} and {\it receive} operations defined by the
+above statements are said to {\it match} if they satisfy the
+following conditions:
+
+\begin{enumerate}
+  \item
+  The channel expressions $b$ and $c$ are of the same type
+  $T$ and denote the same channel.
+  \item
+  The output expression $e$ and the input variable $v$ are
+  of the same type, which is a message type of $T$.
+\end{enumerate}
+
+The execution of a {\it send} operation delays a process
+until another process is ready to execute a matching {\it
+receive} operation (and vice versa). If and when this
+happens, a {\it communication} takes place as follows:
+
+\begin{enumerate}
+  \item
+  The sending process obtains a value by evaluating the
+  output expression $e$.
+  \item
+  The receiving process assigns the value to the input
+  variable $v$.
+\end{enumerate}
+
+After the communication, the sending and receiving processes
+proceed independently.
+
+\blankline
+
+{\it Communication Errors:}
+
+\begin{enumerate}
+  \item
+  {\it Undefined channel reference}: A channel expression
+  does not denote a channel.
+  \item
+  {\it Channel contention}: Two parallel processes both
+  attempt to send (or receive) through the same channel at
+  the same time.
+  \item
+  {\it Message type error}: Two parallel processes attempt
+  to communicate through the same channel, but the output
+  expression and the input variable are of different message
+  types.
+\end{enumerate}
+
+The abbreviation
+
+\begin{center}
+  send($b,e_1,e_2,\ldots,e_n$)
+\end{center}
+
+\noindent
+is equivalent to
+
+\begin{center}
+  {\Begin} send($b,e_1$); send($b,e_2,\ldots,e_n$) {\End}
+\end{center}
+
+The abbreviation
+
+\begin{center}
+  receive($c,v_1,v_2,\ldots,v_n$)
+\end{center}
+
+\noindent
+is equivalent to
+
+\begin{center}
+  {\Begin} receive($c,v_1$); receive($c,v_2,\ldots,v_n$) {\End}
+\end{center}
+
+\examples
+
+\begin{program}{8.1em}
+  {\PA}send(out, ai)        \\
+  {\PA}receive(inp, aj)     \\
+  {\PA}send(top[i,j], 2, ai)
+\end{program}
+
+
+\section{Statements}
+
+\subsection{Assignment Statements}
+
+If $x$ is a channel variable access and $y$ is a
+well-defined channel expression of the same type, the effect
+of the assignment statement
+
+\begin{center}
+  x := y
+\end{center}
+
+\noindent
+is to make the values of $x$ and $y$ denote the same
+channel.
+
+\blankline
+
+\example
+
+\begin{center}
+  left := top[i,j]
+\end{center}
+
+
+\subsection{Procedure Statements}
+
+The {\it restricted actual parameters} of a procedure
+statement are the explicit variable parameters that occur in
+the actual parameter list and the implicit parameters of the
+corresponding procedure block.
+
+\blankline
+
+{\it Restriction}: The restricted actual parameters of a
+procedure statement must be distinct entire variables (or
+components of such variables).
+
+\blankline
+
+A procedure statement cannot occur in the statement part of
+a function block. This rule also applies to a procedure
+statement that denotes activation of a required procedure.
+
+
+\subsection{Parallel Statements}
+
+\begin{grammar}
+  {\GA}parallel-statement =                                 \\
+    {\GB}``{\Parallel}'' process-statement-list ``{\End}'' .\\
+  {\GA}process-statement-list =                             \\
+    {\GB}process-statement \{ ``$|$'' process-statement \} .\\
+  {\GA}process-statement =                                  \\
+    {\GB}statement-sequence .                               \\
+\end{grammar}
+
+A {\it parallel} statement denotes parallel processes. Each
+process is denoted by a separate process statement.
+
+The effect of a parallel statement is to execute the process
+statements as parallel processes until all of them have
+terminated.
+
+\blankline
+
+{\it Restriction}: In a parallel statement, a target
+variable of one process statement cannot be a target or
+expression variable of another process statement.
+
+\blankline
+
+\example
+
+\begin{program}{13.6em}
+  {\PA}{\Parallel}                        \\
+    {\PB}source(a, c[0]); sink(a, c[p])$|$\\
+    {\PB}{\Forall} k := 1 {\To} p {\Do}   \\
+      {\PC}node(k, c[k$-$1], c[k])        \\
+  {\PA}{\End}
+\end{program}
+
+
+\subsection{Forall Statements}
+
+\begin{grammar}
+  {\GA}forall-statement =                                  \\
+    {\GB}``{\Forall}'' index-variable-declaration ``{\Do}''\\
+      {\GC}element-statement .                             \\
+  {\GA}index-variable-declaration =                        \\
+    {\GB}variable-identifier ``:='' process-index-range .  \\
+  {\GA}process-index-range =                               \\
+     {\GB}expression ``{\To}'' expression .                \\
+  {\GA}element-statement =                                 \\
+     {\GB}statement .                                      \\
+\end{grammar}
+
+The statement
+
+\begin{center}
+  {\Forall} $i$ := $e_1$ {\To} $e_2$ {\Do} $S$
+\end{center}
+
+\noindent
+denotes a (possibly empty) array of parallel processes,
+called {\it element processes}, and a corresponding range of
+values, called {\it process indices}. The lower and upper
+bounds of the process index range are denoted by two
+expressions, $e_1$ and $e_2$, of the same simple type (the
+{\it index type}). Every index value corresponds to a
+separate element process defined by an {\it index variable
+i} and an {\it element statement S}.
+
+The {\it index variable declaration}
+
+\begin{center}
+  $i$ := $e_1$ {\To} $e_2$
+\end{center}
+
+\noindent
+introduces the index variable $i$ which is local to the
+element statement $S$.
+
+A {\it forall} statement is executed as follows:
+
+\begin{enumerate}
+  \item
+  The expressions $e_1$ and $e_2$ are evaluated. If
+  $e_1 > e_2$, the execution of the {\it forall} statement
+  terminates; otherwise, step 2 takes place.
+  \item
+  $e_2-e_1+1$ element processes run in parallel until all of
+  them have terminated. Each element process creates a local
+  instance of the index variable $i$, assigns the
+  corresponding process index to the variable, and executes
+  the element statement $S$. When an element process
+  terminates, its local instance of the index variable
+  ceases to exist.
+\end{enumerate}
+
+{\it Restriction}: In a {\it forall} statement, the element
+statement cannot use target variables.
+
+\blankline
+
+\examples
+
+\begin{program}{11.8em}
+  {\PA}{\Forall} k := 1 {\To} p {\Do}  \\
+    {\PB}node(k, c[k$-$1], c[k])       \\
+  {\PA}                                \\
+  {\PA}{\Forall} i := 0 {\To} 1 {\Do}  \\
+    {\PB}{\Forall} j := 0 {\To} 1 {\Do}\\
+      {\PC}quadtree(i, j, top[i,j])
+\end{program}
+
+
+\subsection{Unrestricted Statements}
+
+\begin{grammar}
+  {\GA}unrestricted-statement =  \\
+    {\GB}sic-clause statement .  \\
+  {\GA}sic-clause =              \\
+    {\GB}``['' ``{\Sic}'' ``]'' .\\
+\end{grammar}
+
+A statement $S$ is said to be {\it unrestricted} in the
+following cases:
+
+\begin{enumerate}
+  \item
+  The statement $S$ is prefixed by a {\it sic} clause.
+  \item
+  The statement $S$ is a component of an unrestricted
+  statement.
+\end{enumerate}
+
+All other statements are said to be {\it restricted}.
+
+Restricted statements must satisfy the rules labeled as
+{\it restrictions} in this paper. These rules restrict the
+use of entire variables in procedure statements, parallel
+statements, and {\it forall} statements to make it possible
+to check the disjointness of parallel processes during
+single-pass compilation (see 7.2, 7.3 and 7.4).
+
+The same rules do {\it not} apply to unrestricted
+statements. Consequently, the programmer must prove that
+each unrestricted statement preserves the disjointness of
+parallel processes; otherwise, the semantics of unrestricted
+statements are beyond the scope of this paper.
+
+\blankline
+
+\examples
+
+\begin{program}{14.9em}
+  {\PA}[{\Sic}] \{ i $<>$ j \}                     \\
+    {\PB}swap(a[i], a[j])                          \\
+  {\PA}                                            \\
+  {\PA}[{\Sic}] \{ i $<>$ j \}                     \\
+    {\PB}{\Parallel} a[i] := ai$|$a[j] := aj {\End}\\
+  {\PA}                                            \\
+  {\PA}[{\Sic}] \{ disjoint elements a[i] \}       \\
+    {\PB}{\Forall} i := 1 {\To} n {\Do} a[i] := ai
+\end{program}
+
+
+\subsection{Assume Statements}
+
+\begin{grammar}
+  {\GA}assume-statement =          \\
+    {\GB}``{\Assume}'' assumption .\\
+  {\GA}assumption =                \\
+    {\GB}expression .              \\
+\end{grammar}
+
+The effect of an {\it assume} statement is to test an
+assumption denoted by a boolean expression. If the
+assumption is true, the test terminates; otherwise, program
+execution stops.
+
+\blankline
+
+\example
+
+\begin{center}
+  {\Assume} i $<>$ j
+\end{center}
+
+
+\section{SuperPascal versus Pascal}
+
+The following summarizes the differences between
+{\Superpascal} and Pascal.
+
+
+\subsection{Added Features}
+
+Table~1 lists the {\Superpascal} features that were added
+to Pascal.
+
+\begin{table}[p]
+  \caption{Added features}
+  \begin{mytabular}{ll}
+    \hline
+    Language                  & Required   \\
+    concepts                  & identifiers\\
+    \hline
+    channel types             & null       \\
+    structured function types & maxstring  \\
+    parallel statements       & string     \\
+    forall statements         & open       \\
+    unrestricted statements   & send       \\
+    assume statements         & receive    \\
+    \hline
+  \end{mytabular}
+\end{table}
+
+
+\subsection{Excluded Features}
+
+Table~2 lists the Pascal features that were excluded from
+{\Superpascal}.
+
+\begin{table}[p]
+  \caption{Excluded features}
+  \begin{mytabular}{ll}
+    \hline
+    Language                    & Required   \\
+    concepts                    & identifiers\\
+    \hline
+    labels                      & text       \\
+    subrange types              & input      \\
+    record variants             & output     \\
+    empty field lists           & page       \\
+    set types                   & reset      \\
+    file types                  & get        \\
+    pointer types               & rewrite    \\
+    packed types                & put        \\
+    nameless types              & new        \\
+    renamed types               & dispose    \\
+    functions with side-effects & pack       \\
+    functional parameters       & unpack     \\
+    procedural parameters       &            \\
+    forward declarations        &            \\
+    goto statements             &            \\
+    with statements             &            \\
+    \hline
+  \end{mytabular}
+\end{table}
+
+
+\subsection{Minor Differences}
+
+{\Superpascal} differs from Pascal in the following details:
+
+\begin{enumerate}
+  \item
+  {\it Program parameters} are comments only.
+  \item
+  A multi-dimensional {\it array type} is defined in terms
+  of one-dimensional array types.
+  \item
+  The required type {\it string} is the only string type:
+
+  \begin{center}
+    string = {\Array} [1..maxstring] {\Of} char
+  \end{center}
+
+  \noindent
+  A character string with $n$ string elements denotes a
+  string of $n$ characters followed by maxstring$-n$ {\it
+  null} characters, where
+
+  \begin{center}
+     $2\,{\leq}\,n\,{\leq}$ maxstring{\blank}
+     maxstring = 80{\blank}null = chr(0)\\
+  \end{center}
+
+  \noindent
+  The default length $n$ of a write parameter of type string
+  is the number of characters (if any) which precede the
+  first null character (if any), where
+  $0\,{\leq}\,n\,{\leq}$ maxstring.
+  \item
+  The required textfile {\it input} is the only input file.
+  The file identifier is omitted from {\it eof} and {\it
+  eoln} function designators and {\it read} and {\it readln}
+  statements. The input file is an implicit value parameter
+  of the eof and eoln functions and is an implicit variable
+  parameter of the read and readln procedures (see 4.2).
+  \item
+  The required textfile {\it output} is the only output
+  file. The file identifier is omitted from {\it write} and
+  {\it writeln} statements. The output file is an implicit
+  variable parameter of the write and writeln procedures
+  (see 4.2).
+\end{enumerate}
+
+
+\subsection{Required Identifiers}
+
+Table 3 lists the required identifiers of {\Superpascal}.
+
+\begin{table}[htb]
+  \caption{Required identifiers}
+  \begin{mytabular}{lll}
+    \hline
+    abs     & maxint    & round  \\
+    arctan  & maxstring & send   \\
+    boolean & null      & sin    \\
+    char    & odd       & sqr    \\
+    chr     & open      & sqrt   \\
+    cos     & ord       & string \\
+    eof     & pred      & succ   \\
+    eoln    & read      & true   \\
+    exp     & readln    & trunc  \\
+    false   & real      & write  \\
+    integer & receive   & writeln\\
+    ln      &           &        \\
+    \hline
+  \end{mytabular}
+\end{table}
+
+
+\subsection{Syntax Summary}
+
+The following grammar defines the complete syntax of
+{\Superpascal}.
+
+\blankline
+
+\begin{grammar}
+  {\GA}program =                                          \\
+    {\GB}program-heading ``;'' program-block ``.'' .      \\
+  {\GA}program-heading =                                  \\
+    {\GB}``{\Program}'' program-identifier
+           [ ``('' program-parameters ``)'' ] .           \\
+  {\GA}program-parameters =                               \\
+    {\GB}parameter-identifier
+           \{ ``,'' parameter-identifier \} .             \\
+  {\GA}program-block =                                    \\
+    {\GB}block .                                          \\
+  {\GA}block =                                            \\
+    {\GB}[ constant-definitions ]
+           [ type-definitions ]                           \\
+      {\GC}[ variable-declarations ]
+             [ routine-declarations ]                     \\
+        {\GD}statement-part .                             \\
+  {\GA}constant-definitions =                             \\
+    {\GB}``{\Const}'' constant-definition ``;''
+            \{ constant-definition ``;'' \} .             \\
+  {\GA}constant-definition =                              \\
+    {\GB}constant-identifier ``='' constant .             \\
+  {\GA}constant =                                         \\
+    {\GB}[ sign ] unsigned-constant .                     \\
+  {\GA}sign =                                             \\
+    {\GB}``+'' $|$ ``$-$'' .                              \\
+  {\GA}type-definitions =                                 \\
+    {\GB}``{\Type}'' type-definition ``;''
+           \{ type-definition ``;'' \} .                  \\
+  {\GA}type-definition =                                  \\
+    {\GB}type-identifier ``='' new-type .                 \\
+  {\GA}new-type =                                         \\
+    {\GB}enumerated-type $|$ array-type $|$
+         record-type $|$ channel-type .                   \\
+  {\GA}enumerated-type =                                  \\
+    {\GB}``('' constant-identifier-list ``)'' .           \\
+  {\GA}constant-identifier-list =                         \\
+    {\GB}constant-identifier
+           \{ ``,'' constant-identifier \} .              \\
+  {\GA}array-type =                                       \\
+    {\GB}``{\Array}'' index-range ``{\Of}''
+           type-identifier .                              \\
+  {\GA}index-range =                                      \\
+    {\GB}``['' constant ``..'' constant ``]'' .           \\
+  {\GA}record-type =                                      \\
+    {\GB}``{\Record}'' field-list ``{\End}'' .            \\
+  {\GA}field-list =                                       \\
+    {\GB}record-section
+           \{ ``;'' record-section \} [ ``;'' ] .         \\
+  {\GA}record-section =                                   \\
+    {\GB}field-identifier-list ``:'' type-identifier .    \\
+  {\GA}field-identifier-list =                            \\
+    {\GB}field-identifier
+           \{ ``,'' field-identifier \} .                 \\
+  {\GA}channel-type =                                     \\
+    {\GB}``$*$'' ``('' message-type-list ``)'' .          \\
+  {\GA}message-type-list =                                \\
+    {\GB}type-identifier \{ ``,'' type-identifier \} .    \\
+  {\GA}variable-declarations =                            \\
+    {\GB}``{\Var}'' variable-declaration ``;''
+           \{ variable-declaration ``;'' \} .             \\
+  {\GA}variable-declaration =                             \\
+    {\GB}variable-identifier-list ``:'' type-identifier . \\
+  {\GA}variable-identifier-list =                         \\
+    {\GB}variable-identifier
+           \{ ``,'' variable-identifier \} .              \\
+  {\GA}routine-declarations =                             \\
+    {\GB}routine-declaration ``;''
+           \{ routine-declaration ``;'' \} .              \\
+  {\GA}routine-declaration =                              \\
+    {\GB}function-declaration $|$ procedure-declaration . \\
+  {\GA}function-declaration =                             \\
+    {\GB}function-heading ``;'' function-block .          \\
+  {\GA}function-heading =                                 \\
+    {\GB}``{\Function}'' function-identifier
+           [ formal-parameter-list ]                      \\
+      {\GC}``:'' type-identifier .                        \\
+  {\GA}formal-parameter-list =                            \\
+    {\GB}``('' formal-parameters ``)'' .                  \\
+  {\GA}formal-parameters =                                \\
+    {\GB}formal-parameter-section
+           \{ ``;'' formal-parameter-section \} .         \\
+  {\GA}formal-parameter-section =                         \\
+    {\GB}[ ``{\Var}'' ] variable-declaration .            \\
+  {\GA}function-block =                                   \\
+    {\GB}block .                                          \\
+  {\GA}procedure-declaration =                            \\
+    {\GB}procedure-heading ``;'' procedure-block .        \\
+  {\GA}procedure-heading =                                \\
+    {\GB}``{\Procedure}'' procedure-identifier
+           [ formal-parameter-list ] .                    \\
+  {\GA}procedure-block =                                  \\
+    {\GB}block .                                          \\
+  {\GA}statement-part =                                   \\
+    {\GB}compound-statement .                             \\
+  {\GA}compound-statement =                               \\
+    {\GB}``{\Begin}'' statement-sequence ``{\End}'' .     \\
+  {\GA}statement-sequence =                               \\
+    {\GB}statement \{ ``;'' statement \} .                \\
+  {\GA}statement =                                        \\
+    {\GB}empty-statement $|$ assignment-statement $|$     \\
+    {\GB}procedure-statement $|$ if-statement $|$         \\
+    {\GB}while-statement $|$ repeat-statement $|$         \\
+    {\GB}for-statement $|$ case-statement $|$             \\
+    {\GB}compound-statement $|$ parallel-statement $|$    \\
+    {\GB}forall-statement $|$ unrestricted-statement $|$  \\
+    {\GB}assume-statement .                               \\
+  {\GA}empty-statement = .                                \\
+  {\GA}assignment-statement =                             \\
+    {\GB}left-part ``:='' expression .                    \\
+  {\GA}left-part =                                        \\
+    {\GB}variable-access $|$ function-identifier .        \\
+  {\GA}procedure-statement =                              \\
+    {\GB}procedure-identifier [ actual-parameter-list ] . \\
+  {\GA}actual-parameter-list =                            \\
+    {\GB}``('' actual-parameters ``)'' .                  \\
+  {\GA}actual-parameters =                                \\
+    {\GB}actual-parameter \{ ``,'' actual-parameter \} .  \\
+  {\GA}actual-parameter =                                 \\
+    {\GB}expression $|$ variable-access $|$
+         write-parameter .                                \\
+  {\GA}write-parameter =                                  \\
+    {\GB}expression
+           [ ``:'' expression [ ``:'' expression ] ] .    \\
+  {\GA}if-statement =                                     \\
+    {\GB}``{\If}'' expression ``{\Then}'' statement       \\
+      {\GC}[ ``{\Else}'' statement ] .                    \\
+  {\GA}while-statement =                                  \\
+    {\GB}``{\While}'' expression ``{\Do}'' statement .    \\
+  {\GA}repeat-statement =                                 \\
+    {\GB}``{\Repeat}'' statement-sequence
+           ``{\Until}'' expression .                      \\
+  {\GA}for-statement =                                    \\
+    {\GB}``{\For}'' control-variable ``:='' expression    \\
+      {\GC}( ``{\To}'' $|$ ``{\Downto}'' ) expression
+             ``{\Do}'' statement .                        \\
+  {\GA}control-variable =                                 \\
+    {\GB}entire-variable .                                \\
+  {\GA}case-statement =                                   \\
+    {\GB}``{\Case}'' expression ``{\Of}''
+           case-list ``{\End}'' .                         \\
+  {\GA}case-list =                                        \\
+    {\GB}case-list-element \{ ``;'' case-list-element \}
+           [ ``;'' ] .                                    \\
+  {\GA}case-list-element =                                \\
+    {\GB}case-constant \{ ``,'' case-constant \}
+           ``:'' statement .                              \\
+  {\GA}case-constant =                                    \\
+    {\GB}constant .                                       \\
+  {\GA}parallel-statement =                               \\
+    {\GB}``{\Parallel}'' process-statement-list
+           ``{\End}'' .                                   \\
+  {\GA}process-statement-list =                           \\
+    {\GB}process-statement
+           \{ ``$|$'' process-statement \} .              \\
+  {\GA}process-statement =                                \\
+    {\GB}statement-sequence .                             \\
+  {\GA}forall-statement =                                 \\
+    {\GB}``{\Forall}'' index-variable-declaration
+         ``{\Do}''                                        \\
+      {\GC}element-statement .                            \\
+  {\GA}index-variable-declaration =                       \\
+    {\GB}variable-identifier ``:='' process-index-range . \\
+  {\GA}process-index-range =                              \\
+    {\GB}expression ``{\To}'' expression .                \\
+  {\GA}element-statement =                                \\
+    {\GB}statement .                                      \\
+  {\GA}unrestricted-statement =                           \\
+    {\GB}``['' ``{\Sic}'' ``]'' statement .               \\
+  {\GA}assume-statement =                                 \\
+    {\GB}``{\Assume}'' expression .                       \\
+  {\GA}expression =                                       \\
+    {\GB}simple-expression                                \\
+      {\GC}[ relational-operator simple-expression ] .    \\
+  {\GA}relational-operator =                              \\
+    {\GB}``$<$'' $|$ ``='' $|$ ``$>$'' $|$
+         ``$<=$'' $|$ ``$<>$'' $|$ ``$>=$'' .             \\
+  {\GA}simple-expression =                                \\
+    {\GB}[ sign ] term \{ adding-operator term \} .       \\
+  {\GA}adding-operator =                                  \\
+    {\GB}``+'' $|$ ``$-$'' $|$ ``{\Or}'' .                \\
+  {\GA}term =                                             \\
+    {\GB}factor \{ multiplying-operator factor \} .       \\
+  {\GA}multiplying-operator =                             \\
+    {\GB}``$*$'' $|$ ``/'' $|$ ``{\Div}'' $|$
+         ``{\Mod}'' $|$ ``{\And}'' .                      \\
+  {\GA}factor =                                           \\
+    {\GB}function-designator $|$ variable-access $|$      \\
+    {\GB}unsigned-constant $|$ ``('' expression ``)'' $|$ \\
+    {\GB}``{\Not}'' factor .                              \\
+  {\GA}function-designator =                              \\
+    {\GB}function-identifier [ actual-parameter-list ] .  \\
+  {\GA}variable-access =                                  \\
+    {\GB}entire-variable \{ component-selector \} .       \\
+  {\GA}entire-variable =                                  \\
+    {\GB}variable-identifier .                            \\
+  {\GA}component-selector =                               \\
+    {\GB}field-selector $|$ indexed-selector .            \\
+  {\GA}field-selector =                                   \\
+    {\GB}``.'' field-identifier .                         \\
+  {\GA}indexed-selector =                                 \\
+    {\GB}``['' index-expressions ``]'' .                  \\
+  {\GA}index-expressions =                                \\
+    {\GB}expression \{ ``,'' expression \} .              \\
+  {\GA}unsigned-constant =                                \\
+    {\GB}character-string $|$ unsigned-real $|$           \\
+    {\GB}unsigned-integer $|$ constant-identifier .       \\
+  {\GA}character-string =                                 \\
+    {\GB}``\,'\,'' string-elements ``\,'\,'' .            \\
+  {\GA}string-elements =                                  \\
+    {\GB}string-element \{ string-element \} .            \\
+  {\GA}string-element =                                   \\
+    {\GB}string-character $|$ apostrophe-image .          \\
+  {\GA}apostrophe-image =                                 \\
+    {\GB}``\,''\,'' .                                     \\
+  {\GA}unsigned-real =                                    \\
+    {\GB}unsigned-integer real-option .                   \\
+  {\GA}real-option =                                      \\
+    {\GB}``.'' fractional-part [ scaling-part ] $|$
+         scaling-part .                                   \\
+  {\GA}fractional-part =                                  \\
+    {\GB}digit-sequence .                                 \\
+  {\GA}scaling-part =                                     \\
+    {\GB}``e'' scale-factor .                             \\
+  {\GA}scale-factor =                                     \\
+    {\GB}[ sign ] unsigned-integer .                      \\
+  {\GA}unsigned-integer =                                 \\
+    {\GB}digit-sequence .                                 \\
+  {\GA}digit-sequence =                                   \\
+    {\GB}digit \{ digit \} .                              \\
+  {\GA}identifier =                                       \\
+    {\GB}letter \{ letter $|$ digit \} .                  \\
+\end{grammar}
+
+
+\acknowledgements
+
+I thank Jonathan Greenfield and Peter O'Hearn for their
+helpful comments.
+
+
+\begin{mybibliography}{3}
+  \entry
+  IEEE (1983). {\it IEEE Standard Pascal Computer
+  Programming Language}. Institute of Electrical and
+  Electronics Engineers, New York, NY.
+  \entry
+  Brinch Hansen, P. (1993a) SuperPascal---a publication
+  language for parallel scientific computing. School of
+  Computer and Information Science, Syracuse University,
+  Syracuse, NY.
+  \entry
+  Brinch Hansen, P. (1993b) Interference control in
+  SuperPascal---a block-structured parallel language.
+  School of Computer and Information Science, Syracuse
+  Syracuse University, Syracuse, NY.
+\end{mybibliography}
+
+\end{document}

@@ -1,0 +1,3 @@
+echo Compiling Sun4 SuperPascal:
+pc -s -H -O -cg89 -o sc compile.p
+pc -s -H -O -cg89 -o sr interpret.p

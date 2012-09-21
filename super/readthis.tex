@@ -1,0 +1,277 @@
+%  ANONYMOUS FTP OF THE SUPERPASCAL SOFTWARE
+%              PER BRINCH HANSEN
+%  School of Computer and Information Science
+% Syracuse University, Syracuse, NY 13244, USA
+%               29 October 1993
+%     Copyright(c) 1993 Per Brinch Hansen
+
+% LATEX PREAMBLE
+\documentstyle[twoside,11pt]{article}
+\pagestyle{myheadings}
+\setlength{\topmargin}{7mm}
+\setlength{\textheight}{200mm}
+\setlength{\textwidth}{140mm}
+\setlength{\oddsidemargin}{14mm}
+\setlength{\evensidemargin}{12mm}
+\newcommand{\acknowledgements}
+  {\section*{Acknowledgements}
+   \addcontentsline{toc}{section}
+     {Acknowledgements}
+  }
+\newcommand{\blank}
+  {\mbox{\hspace{1.8em}}}
+\newcommand{\blankline}
+  {\medskip}
+\newcommand{\Copyright}
+  {Copyright {\copyright}}
+\newcommand{\entry}
+  {\bibitem{}}
+\newcommand{\example}
+  {{\it Example:}}
+\newcommand{\examples}
+  {{\it Examples:}}
+\newcommand{\mytitle}[3]
+% [title,month,year]
+  {\markboth{PER BRINCH HANSEN}{#1}
+   \thispagestyle{empty}
+   \begin{center}
+     {\Large\bf #1}\\
+     % TITLE    
+     \blankline
+       PER BRINCH HANSEN\\
+     \blankline
+     {\it
+       School of Computer and Information Science  \\
+       Syracuse University, Syracuse, NY 13244, USA\\
+     }
+     \blankline
+     #2 #3\\
+     %  Month Year
+   \end{center}
+  }
+\newcommand{\Superpascal}
+  {\it SuperPascal}
+\newenvironment{grammar}
+  {\begin{small}}
+  {\end{small}}
+\newenvironment{myabstract}
+  {\begin{rm}
+     \noindent{\bf Abstract:}}
+  {\end{rm}}
+\newenvironment{mybibliography}[1]
+% [widestlabel]
+  {\begin{small}
+    \begin{thebibliography}{#1}
+      \addcontentsline{toc}
+        {section}{References}}
+  {  \end{thebibliography}
+   \end{small}}
+\newenvironment{mykeywords}
+  {\begin{small}
+     \noindent{\bf Key Words:}}
+  {\end{small}}
+\newenvironment{mytabular}[1]
+% [columns]
+  {\begin{small}
+     \begin{center}
+       \begin{tabular}{#1}}
+  {    \end{tabular}
+     \end{center}
+   \end{small}}
+\newenvironment{program}[1]
+% [width]
+  {\begin{center}
+     \begin{minipage}{#1}}
+  {  \end{minipage}
+   \end{center}}
+% Program Indentation
+\newcommand{\PA}
+  {\noindent}
+\newcommand{\PB}
+  {\mbox{\hspace{1em}}}
+\newcommand{\PC}
+  {\mbox{\hspace{2em}}}
+\newcommand{\PD}
+  {\mbox{\hspace{3em}}}
+\newcommand{\PE}
+  {\mbox{\hspace{4em}}}
+
+% DOCUMENT TEXT
+\begin{document}
+
+\mytitle{ANONYMOUS FTP OF THE SUPERPASCAL SOFTWARE}
+  {November}{1993}
+
+\noindent
+These instructions describe the {\Superpascal} software,
+define the terms and conditions for its use, and explain how
+you obtain the software by anonymous FTP.
+
+\begin{center}
+  {\bf DEFINITIONS}
+\end{center}
+
+\noindent
+The {\it SuperPascal} software (hereafter {\it Software}) is
+educational software written by Per Brinch Hansen (hereafter
+{\it PBH}). The {\it Software} consists of the {\it Manuals},
+{\it Programs}, and {\it Scripts} for the programming
+language {\Superpascal} invented by {\it PBH}. The {\it
+Software} is stored as text in 11 files (hereafter {\it
+Files}).
+
+The {\it Manuals}, written by {\it PBH}, are stored as {\LaTeX}
+text in 3 {\it Files}:
+
+\begin{itemize}
+  \item
+  {\it report.tex:} ``The programming language SuperPascal.''
+  \item
+  {\it user.tex:} ``The SuperPascal user manual.''
+  \item
+  {\it notes.tex:} ``The SuperPascal software notes.''
+\end{itemize}
+
+The {\it Programs}, written by {\it PBH}, are a {\Superpascal}
+compiler and interpreter (hereafter {\it Compiler} and {\it
+Interpreter}). The {\it Programs} are written in Pascal for
+Sun3 and Sun4 workstations running Unix. The {\it Programs}
+are stored as Pascal text in 6 {\it Files}:
+
+\begin{itemize}
+  \item
+  {\it common.p:} The common declarations used by the
+  {\it Compiler} and {\it Interpreter}.
+  \item
+  {\it scan.p:} The {\it Compiler} procedure that performs
+  lexical analysis.
+  \item
+  {\it parse.p:} The {\it Compiler} procedure that performs
+  syntax, scope, and type analysis.
+  \item
+  {\it assemble.p:} The {\it Compiler} procedure that
+  assembles interpreted code.
+  \item
+  {\it compile.p:} The {\it Compiler} program.
+  \item
+  {\it interpret.p:} The {\it Interpreter} program.
+\end{itemize}
+
+The {\it Scripts} are Unix shell scripts stored as text in 2
+{\it Files}:
+
+\begin{itemize}
+  \item
+  {\it sun3.user:} A shell script for compilation of the
+  {\it Programs} on a Sun3 workstation under Unix.
+  \item
+  {\it sun4.user:} A shell script for compilation of the
+  {\it Programs} on a Sun4 workstation under Unix.
+\end{itemize}
+
+\begin{center}
+  {\bf TERMS AND CONDITIONS}
+\end{center}
+
+\begin{it}
+\noindent
+THE MANUALS ARE COPYRIGHTED BY PBH. THE PROGRAMS ARE IN THE
+PUBLIC DOMAIN. YOU CAN OBTAIN THE SOFTWARE BY ANONYMOUS FTP.
+THE SOFTWARE IS NOT GUARANTEED FOR A PARTICULAR PURPOSE. PBH
+SUPPLIES THE SOFTWARE ``AS IS'' WITHOUT ANY WARRANTIES OR
+REPRESENTATIONS AND DOES NOT ACCEPT ANY LIABILITIES WITH
+RESPECT TO THE SOFTWARE.
+YOU (THE USER) ARE RESPONSIBLE FOR SELECTING THE SOFTWARE, AND
+FOR THE USE AND RESULTS OBTAINED FROM THE SOFTWARE. YOUR USE
+OF THE SOFTWARE INDICATES YOUR ACCEPTANCE OF THESE TERMS AND
+CONDITIONS.
+\end{it}
+
+\begin{center}
+  {\bf FILE TRANSFER PROCEDURE}
+\end{center}
+
+\noindent
+To obtain the software, use anonymous FTP from the directory
+{\it pbh@top.cis.syr.edu}. If your local machine runs Unix,
+follow these steps to copy the files:
+
+\blankline
+
+Create an empty directory on your local machine by typing
+
+\begin{center}
+  mkdir clone
+\end{center}
+
+Enter the local directory by typing
+
+\begin{center}
+  cd clone
+\end{center}
+
+Select the remote machine by typing
+
+\begin{center}
+  ftp top.cis.syr.edu
+\end{center}
+
+When prompted for your name, type
+
+\begin{center}
+  anonymous
+\end{center}
+
+When prompted for your password, type your
+
+\begin{center}
+  $<$e-mail address$>$
+\end{center}
+
+Enter the remote ftp directory by typing
+
+\begin{center}
+  cd pbh
+\end{center}
+
+Copy a shell archive that contains the {\it Files} by
+typing
+
+\begin{center}
+  get software.shar
+\end{center}
+
+Leave the remote machine by typing
+
+\begin{center}
+  bye
+\end{center}
+
+Split the archive into {\it Files} by typing
+
+\begin{center}
+  sh software.shar
+\end{center}
+
+Your local directory should now contain the Files.
+
+\begin{center}
+  {\bf HOW TO GET STARTED}
+\end{center}
+
+\noindent
+Transform the {\LaTeX} files into PostScript files and
+print the {\it Manuals}. Read ``The SuperPascal software
+notes" which explain how you compile the {\it Programs}
+on Sun3 and Sun4 workstations. Compile the {\it Programs}
+into two executable files:
+
+\begin{program}{14.1em}
+  {\PA}sc{\blank}An executable {\it Compiler}.   \\
+  {\PA}sr{\blank}An executable {\it Interpreter}.\\
+\end{program}
+
+Then read "The programming language SuperPascal" and "The
+SuperPascal user manual."
+
+\end{document}

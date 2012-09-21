@@ -1,0 +1,390 @@
+%        THE SUPERPASCAL SOFTWARE NOTES
+%              PER BRINCH HANSEN
+%  School of Computer and Information Science
+% Syracuse University, Syracuse, NY 13244, USA
+%               29 October 1993
+%     Copyright(c) 1993 Per Brinch Hansen
+
+% LATEX PREAMBLE
+\documentstyle[twoside,11pt]{article}
+\pagestyle{myheadings}
+\setlength{\topmargin}{7mm}
+\setlength{\textheight}{200mm}
+\setlength{\textwidth}{140mm}
+\setlength{\oddsidemargin}{14mm}
+\setlength{\evensidemargin}{12mm}
+\newcommand{\acknowledgements}
+  {\section*{Acknowledgements}
+   \addcontentsline{toc}{section}
+     {Acknowledgements}
+  }
+\newcommand{\blank}
+  {\mbox{\hspace{1.8em}}}
+\newcommand{\blankline}
+  {\medskip}
+\newcommand{\Copyright}
+  {Copyright {\copyright}}
+\newcommand{\entry}
+  {\bibitem{}}
+\newcommand{\example}
+  {{\it Example:}}
+\newcommand{\examples}
+  {{\it Examples:}}
+\newcommand{\mytitle}[3]
+% [title,month,year]
+  {\markboth{Per Brinch Hansen}{#1}
+   \thispagestyle{empty}
+   \begin{center}
+     {\Large\bf #1}\\
+     % TITLE    
+     \blankline
+       PER BRINCH HANSEN
+     \footnote{
+       \Copyright #3 % Year
+       Per Brinch Hansen. All rights reserved.}\\
+     \blankline
+     {\it
+       School of Computer and Information Science  \\
+       Syracuse University, Syracuse, NY 13244, USA\\
+     }
+     \blankline
+     #2 #3\\
+     %  Month Year
+   \end{center}
+  }
+\newcommand{\Superpascal}
+  {\it SuperPascal}
+\newenvironment{grammar}
+  {\begin{small}}
+  {\end{small}}
+\newenvironment{myabstract}
+  {\begin{rm}
+     \noindent{\bf Abstract:}}
+  {\end{rm}}
+\newenvironment{mybibliography}[1]
+% [widestlabel]
+  {\begin{small}
+    \begin{thebibliography}{#1}
+      \addcontentsline{toc}
+        {section}{References}}
+  {  \end{thebibliography}
+   \end{small}}
+\newenvironment{mykeywords}
+  {\begin{small}
+     \noindent{\bf Key Words:}}
+  {\end{small}}
+\newenvironment{mytabular}[1]
+% [columns]
+  {\begin{small}
+     \begin{center}
+       \begin{tabular}{#1}}
+  {    \end{tabular}
+     \end{center}
+   \end{small}}
+\newenvironment{program}[1]
+% [width]
+  {\begin{center}
+     \begin{minipage}{#1}}
+  {  \end{minipage}
+   \end{center}}
+% Program Indentation
+\newcommand{\PA}
+  {\noindent}
+\newcommand{\PB}
+  {\mbox{\hspace{1em}}}
+\newcommand{\PC}
+  {\mbox{\hspace{2em}}}
+\newcommand{\PD}
+  {\mbox{\hspace{3em}}}
+\newcommand{\PE}
+  {\mbox{\hspace{4em}}}
+
+% DOCUMENT TEXT
+\begin{document}
+
+\mytitle{The SuperPascal Software Notes}
+  {November}{1993}
+
+\begin{myabstract}
+  These notes describe the {\Superpascal} software, define
+  the terms and conditions for its use, and explain how
+  you compile the {\Superpascal} compiler and interpreter.
+\end{myabstract}
+
+
+\section{Definitions}
+
+\subsection{Software}
+
+The {\it SuperPascal} software (hereafter {\it Software}) is
+educational software written by Per Brinch Hansen (hereafter
+{\it PBH}). The {\it Software} consists of the {\it Manuals},
+{\it Programs}, and {\it Scripts} for the programming
+language {\Superpascal} invented by {\it PBH}. The {\it
+Software} is stored as text in 11 files (hereafter {\it Files}).
+
+
+\subsection{Manuals}
+
+The {\it Manuals}, written by {\it PBH}, are stored as {\LaTeX}
+text in 3 {\it Files}:
+
+\begin{itemize}
+  \item
+  {\it report.tex:} ``The programming language SuperPascal''
+  [Brinch Hansen 1993a].
+  \item
+  {\it user.tex:} ``The SuperPascal user manual'' [Brinch
+  Hansen 1993b].
+  \item
+  {\it notes.tex:} ``The SuperPascal software notes'' [The
+  present notes].
+\end{itemize}
+
+
+\subsection{Programs}
+
+The {\it Programs}, written by {\it PBH}, are a {\Superpascal}
+compiler and interpreter (hereafter {\it Compiler} and {\it
+Interpreter}). The {\it Programs} are based on the Pascal
+compiler and interpreter described and listed in [Brinch
+Hansen 1985]. The {\it Programs} are written in Pascal for
+Sun3 and Sun4 workstations running Unix.
+
+The {\it Programs} are stored as Pascal text in 6 {\it Files}
+(hereafter {\it Program Files}):
+
+\begin{itemize}
+  \item
+  {\it common.p:} The common declarations used by the
+  {\it Compiler} and {\it Interpreter}.
+  \item
+  {\it scan.p:} The {\it Compiler} procedure that performs
+  lexical analysis.
+  \item
+  {\it parse.p:} The {\it Compiler} procedure that performs
+  syntax, scope, and type analysis.
+  \item
+  {\it assemble.p:} The {\it Compiler} procedure that
+  assembles interpreted code.
+  \item
+  {\it compile.p:} The {\it Compiler} program.
+  \item
+  {\it interpret.p:} The {\it Interpreter} program.
+\end{itemize}
+
+
+\subsection{Scripts}
+
+The {\it Scripts} are Unix shell scripts stored as text in 2
+{\it Files}:
+
+\begin{itemize}
+  \item
+  {\it sun3.user:} A shell script for compilation of the
+  {\it Programs} on a Sun3 workstation under Unix.
+  \item
+  {\it sun4.user:} A shell script for compilation of the
+  {\it Programs} on a Sun4 workstation under Unix.
+\end{itemize}
+
+
+\section{Terms and Conditions}
+
+\begin{it}
+  THE MANUALS ARE COPYRIGHTED BY PBH. THE PROGRAMS ARE IN THE
+  PUBLIC DOMAIN. YOU CAN OBTAIN THE SOFTWARE BY ANONYMOUS FTP.
+  THE SOFTWARE IS NOT GUARANTEED FOR A PARTICULAR PURPOSE. PBH
+  SUPPLIES THE SOFTWARE ``AS IS'' WITHOUT ANY WARRANTIES OR
+  REPRESENTATIONS AND DOES NOT ACCEPT ANY LIABILITIES WITH
+  RESPECT TO THE SOFTWARE.
+  YOU (THE USER) ARE RESPONSIBLE FOR SELECTING THE SOFTWARE, AND
+  FOR THE USE AND RESULTS OBTAINED FROM THE SOFTWARE. YOUR USE
+  OF THE SOFTWARE INDICATES YOUR ACCEPTANCE OF THESE TERMS AND
+  CONDITIONS.
+\end{it}
+
+
+\section{Software Limits}
+
+The {\it Program File common.p} (hereafter {\it Common
+Declarations}) defines common constants, types, functions, and
+procedures used by the {\it Programs}. The limits of software
+arrays are defined by common constants (hereafter {\it Software
+Limits}). If the {\it Software Limits} are too small for
+compilation or execution of a user program, these limits must
+be increased by editing the {\it Common Declarations} and
+recompiling the {\it Programs}.
+
+
+\section{Include Commands}
+
+The {\it Program File compile.p} contains the following {\it
+include commands}:
+
+\begin{program}{10.0em}
+  {\PA}{\#}include "common.p"  \\
+  {\PA}{\#}include "scan.p"    \\
+  {\PA}{\#}include "parse.p"   \\
+  {\PA}{\#}include "assemble.p"\\
+\end{program}
+
+These commands ensure that Pascal compilation of the {\it
+Compiler} also includes the {\it Common Declarations} and
+the {\it Compiler} procedures.
+
+The {\it Program File interpret.p} contains the {\it
+include} command:
+
+\begin{center}
+  {\#}include "common.p"
+\end{center}
+
+This command ensures that Pascal compilation of the
+{\it Interpreter} also includes the {\it Common
+Declarations}.
+
+
+\section{Nonstandard Pascal}
+
+The {\it Programs} use the following nonstandard
+statements, which are Sun extensions of Pascal [Sun
+Microsystems 1986]:
+
+\begin{mytabular}{lll}
+  \hline
+  Program File & Procedure  & Nonstandard statement     \\
+  \hline
+  compile.p    & testoutput & rewrite(log, kind)        \\
+  compile.p    & codeoutput & rewrite(code, codename)   \\
+  compile.p    & firstpass  & rewrite(errors, errorfile)\\
+  compile.p    & firstpass  & reset(source, sourcename) \\
+  interpret.p  & readtime   & t := clock                \\
+  interpret.p  & openoutput & rewrite(outfile, outname) \\
+  interpret.p  & openinput  & reset(inpfile, inpname)   \\
+  interpret.p  & start      & reset(codefile, codename) \\
+  \hline
+\end{mytabular}
+
+The rest of the {\it Program Files} conform to {\it ISO
+Level 1 Standard Pascal} [British Standards Institute 1982].
+
+
+\section{Program Compilation}
+
+When you have obtained the {\it Files}, the first step is
+is to compile the {\it Programs}.
+
+On a {\it Sun3} you compile the {\it Programs} by typing the
+Unix command:
+
+\begin{center}
+  csh sun3.user
+\end{center}
+
+The {\it Script sun3.user} contains the Unix commands:
+
+\begin{program}{16.7em}
+  {\PA}echo Compiling Sun3 SuperPascal           \\
+  {\PA}pc --s --H --O --f68881 --o sc compile.p  \\
+  {\PA}pc --s --H --O --f68881 --o sr interpret.p\\
+\end{program}
+
+The {\it Programs} are compiled with the following Sun3
+options:
+
+\begin{itemize}
+  \item
+  {\it --s:} Check the Pascal standard.
+  \item
+  {\it --H:} Check pointers (but not subranges).
+  \item
+  {\it --O:} Optimize the code.
+  \item
+  {\it --f68881:} Generate code for the Motorola 68881
+  floating-point processor.
+\end{itemize}
+
+On a {\it Sun4} you compile the {\it Programs} by typing
+the Unix command:
+
+\begin{center}
+  csh sun4.user
+\end{center}
+
+The {\it Script sun4.user} contains the Unix commands:
+
+\begin{program}{15.7em}
+  {\PA}echo Compiling Sun4 SuperPascal         \\
+  {\PA}pc --s --H --O --cg89 --o sc compile.p  \\
+  {\PA}pc --s --H --O --cg89 --o sr interpret.p\\
+\end{program}
+
+The {\it Programs} are compiled with the following Sun4
+options:
+
+\begin{itemize}
+  \item
+  {\it --s:} Check the Pascal standard.
+  \item
+  {\it --H:} Check pointers (but not subranges).
+  \item
+  {\it --O:} Optimize the code.
+  \item
+  {\it --cg89:} Generate code for any Sun4.
+\end{itemize}
+
+The {\it --s} option causes the Sun Pascal compilers to
+display warning mesages about the nonstandard Pascal
+statements used in the {\it Programs}.
+
+A compilation of the {\it Programs} takes 3--5 minutes
+and produces two {\it Executable Files} [Brinch Hansen
+1993b]:
+
+\begin{itemize}
+  \item
+  {\it sc:} An executable {\it Compiler}.
+  \item
+  {\it sr:} An executable {\it Interpreter}.
+\end{itemize}
+
+If you are not using {\Superpascal} on a Sun3 or Sun4, try
+the following if the {\it Programs} cannot be compiled
+directly:
+
+\begin{itemize}
+  \item
+  Change or omit the compilation options in the {\it
+  Scripts}.
+  \item
+  Change or omit the nonstandard statements in the
+  {\it Program Files}.
+  \item
+  Include the {\it Common Declarations} in each of the
+  other {\it Program Files}. These {\it Program Files}
+  can then be compiled separately and linked together.
+\end{itemize}
+
+
+\begin{mybibliography}{5}
+  \entry
+  Brinch Hansen, P. (1985) {\it Brinch Hansen on Pascal
+  Compilers.} Prentice-Hall, Englewood Cliffs, NJ.
+  \entry
+  Brinch Hansen, P. (1993a) The programming language
+  SuperPascal. School of Computer and Information Science,
+  Syracuse University, Syracuse, NY.
+  \entry
+  Brinch Hansen, P. (1993b) The SuperPascal user manual.
+  School of Computer and Information Science, Syracuse
+  University, Syracuse, NY.
+  \entry
+  British Standards Institute (1982) {\it Specification
+  for Computer Programming Language Pascal.} BS 6192.
+  \entry
+  Sun Microsystems (1986) {\it Pascal Programmer's Guide.}
+  Mountain View, CA.
+\end{mybibliography}
+
+\end{document}

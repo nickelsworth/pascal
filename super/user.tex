@@ -1,0 +1,402 @@
+%         THE SUPERPASCAL USER MANUAL
+%              PER BRINCH HANSEN
+%  School of Computer and Information Science
+% Syracuse University, Syracuse, NY 13244, USA
+%               28 October 1993
+%     Copyright(c) 1993 Per Brinch Hansen
+
+% LATEX PREAMBLE
+\documentstyle[twoside,11pt]{article}
+\pagestyle{myheadings}
+\setlength{\topmargin}{7mm}
+\setlength{\textheight}{200mm}
+\setlength{\textwidth}{140mm}
+\setlength{\oddsidemargin}{14mm}
+\setlength{\evensidemargin}{12mm}
+\newcommand{\acknowledgements}
+  {\section*{Acknowledgements}
+   \addcontentsline{toc}{section}
+     {Acknowledgements}
+  }
+\newcommand{\blank}
+  {\mbox{\hspace{1.8em}}}
+\newcommand{\blankline}
+  {\medskip}
+\newcommand{\Copyright}
+  {Copyright {\copyright}}
+\newcommand{\entry}
+  {\bibitem{}}
+\newcommand{\example}
+  {{\it Example:}}
+\newcommand{\examples}
+  {{\it Examples:}}
+\newcommand{\mytitle}[3]
+% [title,month,year]
+  {\markboth{Per Brinch Hansen}{#1}
+   \thispagestyle{empty}
+   \begin{center}
+     {\Large\bf #1}\\
+     % TITLE    
+     \blankline
+       PER BRINCH HANSEN
+     \footnote{
+       \Copyright #3 % Year
+       Per Brinch Hansen. All rights reserved.}\\
+     \blankline
+     {\it
+       School of Computer and Information Science  \\
+       Syracuse University, Syracuse, NY 13244, USA\\
+     }
+     \blankline
+     #2 #3\\
+     %  Month Year
+   \end{center}
+  }
+\newcommand{\Superpascal}
+  {\it SuperPascal}
+\newenvironment{grammar}
+  {\begin{small}}
+  {\end{small}}
+\newenvironment{myabstract}
+  {\begin{rm}
+     \noindent{\bf Abstract:}}
+  {\end{rm}}
+\newenvironment{mybibliography}[1]
+% [widestlabel]
+  {\begin{small}
+    \begin{thebibliography}{#1}
+      \addcontentsline{toc}
+        {section}{References}}
+  {  \end{thebibliography}
+   \end{small}}
+\newenvironment{mykeywords}
+  {\begin{small}
+     \noindent{\bf Key Words:}}
+  {\end{small}}
+\newenvironment{mytabular}[1]
+% [columns]
+  {\begin{small}
+     \begin{center}
+       \begin{tabular}{#1}}
+  {    \end{tabular}
+     \end{center}
+   \end{small}}
+\newenvironment{program}[1]
+% [width]
+  {\begin{center}
+     \begin{minipage}{#1}}
+  {  \end{minipage}
+   \end{center}}
+% Program Indentation
+\newcommand{\PA}
+  {\noindent}
+\newcommand{\PB}
+  {\mbox{\hspace{1em}}}
+\newcommand{\PC}
+  {\mbox{\hspace{2em}}}
+\newcommand{\PD}
+  {\mbox{\hspace{3em}}}
+\newcommand{\PE}
+  {\mbox{\hspace{4em}}}
+
+% DOCUMENT TEXT
+\begin{document}
+
+\mytitle{The SuperPascal User Manual}
+  {November}{1993}
+
+\begin{myabstract}
+  This report explains how you compile and run {\Superpascal}
+  programs [Brinch Hansen 1993a].
+\end{myabstract}
+
+
+\section{Command Aliases}
+
+If you are using {\Superpascal} under Unix, please define the
+following command aliases in the file .{\it cshrc} in your
+home directory:
+
+\begin{program}{23.5em}
+  {\PA}alias sc $<${\it path name of an executable compiler sc}$>$   \\
+  {\PA}alias sr $<${\it path name of an executable interpreter sr}$>$\\
+\end{program}
+
+
+\section{Program Compilation}
+
+You compile a {\Superpascal} program by typing the command
+
+\begin{center}
+  {\it sc}
+\end{center}
+
+\noindent
+followed by a return. When the message
+
+\begin{center}
+  source =
+\end{center}
+
+\noindent
+appears, type the name of a program textfile followed by a
+return. After the message
+
+\begin{center}
+  code =
+\end{center}
+
+\noindent
+type the name of a new program codefile followed by a
+return.
+
+\blankline
+
+\example
+
+\begin{program}{10.5em}
+  {\PA}{\it sc}                    \\
+    {\PB}source = {\it sortprogram}\\
+    {\PB}code = {\it sortcode}     \\
+\end{program}
+
+If the compiler finds errors in a program text, the errors
+are reported both on the screen and in the textfile {\it
+errors}, but no program code is output.
+
+
+\section{Program Execution}
+
+You run a compiled {\Superpascal} program by typing the
+command
+
+\begin{center}
+  {\it sr}
+\end{center}
+
+\noindent
+followed by a return. When the message
+
+\begin{center}
+  code =
+\end{center}
+
+\noindent
+appears, type the name of a program codefile followed by a
+return. After the message
+
+\begin{center}
+  select files?
+\end{center}
+
+\noindent
+you have a choice:
+
+\blankline
+
+1.~If you type {\it no} followed by a return, the program
+will be executed with text input from the {\it keyboard}
+and text output on the {\it screen}.
+
+\blankline
+
+2.~If you type {\it yes} followed by a return, you will
+first be asked to name the input file:
+
+\begin{center}
+  input =
+\end{center}
+
+\noindent
+Type the name of an existing textfile or the word {\it
+keyboard} followed by a return. Finally, you will be asked
+to name the output:
+
+\begin{center}
+  output =
+\end{center}
+
+\noindent
+Type the name of a new textfile or the word {\it screen}
+followed by a return.
+
+\blankline
+
+\examples
+
+\begin{program}{8.1em}
+  {\PA}{\it sr}                 \\
+    {\PB}code = {\it sortcode}  \\
+    {\PB}select files? {\it no} \\
+  {\PA}                         \\
+  {\PA}{\it sr}                 \\
+    {\PB}code = {\it sortcode}  \\
+    {\PB}select files? {\it yes}\\
+    {\PB}input = {\it testdata} \\
+    {\PB}output = {\it screen}  \\
+\end{program}
+
+
+\section{Compile-time Errors}
+
+During compilation, the following program errors are
+reported:
+
+\begin{itemize}
+  \item
+  {\it Ambiguous case constant:} Two case constants denote
+  the same value.
+  \item
+  {\it Ambiguous identifier:} A program, a function
+  declaration, a procedure declaration, or a record type
+  introduces two named entities with the same identifier.
+  \item
+  {\it Forall statement error:} In a restricted {\it forall}
+  statement, the element statement uses a target variable.
+  \item
+  {\it Function block error:} A procedure statement occurs
+  in the statement part of a function block.
+  \item
+  {\it Function parameter error:} A function uses an
+  explicit or implicit variable parameter.
+  \item
+  {\it Identifier kind error:} A named entity of the wrong
+  kind is used in some context. (Constants, types, fields,
+  variables, functions and procedures are different kinds of
+  named entities.)
+  \item
+  {\it Incomplete comment:} The closing delimiter \} of a
+  comment is missing.
+  \item
+  {\it Index range error:} The index range of an array type
+  has a lower bound that exceeds the upper bound.
+  \item
+  {\it Number error:} A constant denotes a number outside
+  the range of integers or reals.
+  \item
+  {\it Parallel statement error:} In a restricted parallel
+  statement, a target variable of one process statement is
+  also a target or an expression variable of another process
+  statement.
+  \item
+  {\it Procedure statement error:} In a restricted procedure
+  statement, an entire variable is used more than once as a
+  restricted actual parameter.
+  \item
+  {\it Recursion error:} A recursive function or procedure
+  uses an implicit parameter.
+  \item
+  {\it Syntax error:} The program syntax is incorrect.
+  \item
+  {\it Type error:} The type of an operand is incompatible
+  with its use.
+  \item
+  {\it Undefined identifier:} An identifier is used without
+  being defined.
+\end{itemize}
+
+
+\section{Run-time Errors}
+
+During program execution, the following program errors are
+reported:
+
+\begin{itemize}
+  \item
+  {\it Channel contention:} Two processes both attemp to
+  send or receive through the same channel.
+  \item
+  {\it Deadlock:} Every process is delayed by a send or
+  receive operation, but none of these operations match.
+  \item
+  {\it False assumption:} An assume statement denotes a
+  false assumption.
+  \item
+  {\it Message type error}: Two processes attempt to
+  communicate through the same channel, but the output
+  expression and the input variable are of different message
+  types.
+  \item
+  {\it Range error:} The value of an index expression or a
+  {\it chr, pred,} or {\it succ} function designator is out
+  of range.
+  \item
+  {\it Undefined case constant:} A case expression does not
+  denote a case constant.
+  \item
+  {\it Undefined channel reference:} A channel expression
+  does not denote a channel.
+\end{itemize}
+
+
+\section{Software Limits}
+
+If a program is too large to be compiled or run, the software
+displays one of the following messages and stops. Each
+message indicates that the limit of a particular software
+array type has been exceeded:
+
+\begin{itemize}
+  \item
+  {\it Block limit exceeded:} The total number of blocks
+  defined by the program and its function declarations,
+  procedure declarations, {\it forall} statements, and
+  process statements exceeds the limit {\it maxblock}.
+  \item
+  {\it Branch limit exceeded:} The total number of branches
+  denoted by all statements in the program exceeds the limit
+  {\it maxlabel}.
+  \item
+  {\it Buffer limit exceeded:} The size of the compiled code
+  exceeds the limit {\it maxbuf}.
+  \item
+  {\it Case limit exceeded:} The number of case constants
+  exceeds the limit {\it maxcase}.
+  \item
+  {\it Channel limit exceeded:} The number of channels
+  opened exceeds the limit {\it maxchan}.
+  \item
+  {\it Character limit exceeded:} The total number of
+  characters in all word symbols and identifiers exceeds the
+  limit {\it maxchar}.
+  \item
+  {\it Memory limit exceeded:} The program execution exceeds
+  the limit {\it maxaddr}.
+  \item
+  {\it Nesting limit exceeded:} The level of nesting of the
+  program and its function declarations, procedure
+  declarations, parallel statements, and {\it forall}
+  statements exceeds the limit {\it maxlevel}.
+  \item
+  {\it String limit exceeded:} The number of characters in a
+  word symbol, an identifier, or a character string exceeds
+  the limit {\it maxstring}.
+\end{itemize}
+
+The standard {\it software limits} are:
+
+\begin{mytabular}{llrllr}
+  maxaddr  & = & 100000 & maxchar   & = & 10000 \\
+  maxblock & = &    200 & maxlabel  & = &  1000 \\
+  maxbuf   & = &  10000 & maxlevel  & = &    10 \\
+  maxcase  & = &    128 & maxstring & = &    80 \\
+  maxchan  & = &  10000 &           &   &       \\
+\end{mytabular}
+
+If these limits are too small for compilation or execution of
+a program, the limits must be increased by editing a common
+declaration file and recompiling both the compiler and the
+interpreter [Brinch Hansen 1993b].
+
+\begin{mybibliography}{2}
+  \entry
+  Brinch Hansen, P. (1993a) The programming language
+  SuperPascal. School of Computer and Information Science,
+  Syracuse University, Syracuse, NY.
+  \entry
+  Brinch Hansen, P. (1993b) The SuperPascal software notes.
+  School of Computer and Information Science, Syracuse
+  University, Syracuse, NY.
+\end{mybibliography}
+
+\end{document}

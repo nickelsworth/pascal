@@ -1,0 +1,8 @@
+
+All of these are in the public domain:
+
+* p4 :: pascal compiler - niklaus wirth, et al ( 1976 )
+* web :: literate programming - donald knuth  ( 1981 )
+* super :: super pascal ( parallel programming ) - per brinch hansen ( 1993 )
+* p5 :: ISO 7185 compliant extensions to p4 - scott moore ( 2009 )
+

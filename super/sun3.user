@@ -1,0 +1,3 @@
+echo Compiling Sun3 SuperPascal:
+pc -s -H -O -f68881 -o sc compile.p
+pc -s -H -O -f68881 -o sr interpret.p
