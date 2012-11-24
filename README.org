@@ -5,4 +5,5 @@ All of these are in the public domain:
 - web :: literate programming - donald knuth  ( 1981 )
 - super :: super pascal ( parallel programming ) - per brinch hansen ( 1993 )
 - p5 :: ISO 7185 compliant extensions to p4 - scott moore ( 2009 )
+- xdp :: TP 3.0-style pascal compiler - vasiliy tereshkov ( 2010 )
 
