@@ -1,4 +1,4 @@
-(*$c+,t-,d-,l-*)
+{$mode iso}(*  $c+,t-,d-,l-*)
 {*******************************************************************************
 *                                                                              *
 *                           Portable Pascal compiler                           *
@@ -111,7 +111,7 @@
 * ipj v l ip jmp: Interprocedure jump. Contains the level of the target        *
 *                 procedure, and the label to jump to. The stack is adjusted   *
 *                 to remove all nested procedures/functions, then the label is *
-*                 unconditionally jumped to.                                   *        
+*                 unconditionally jumped to.                                   *
 *                                                                              *
 * cip p           Call indirect procedure/function. The top of stack has the   *
 *                 address of a mp/address pair pushed by lpa. The dl of the    *
@@ -267,8 +267,8 @@ const
       {
 
       Program object sizes and characteristics, sync with pint. These define
-      the machine specific characteristics of the target. 
-      
+      the machine specific characteristics of the target.
+
       This configuration is for a 32 bit machine as follows:
 
       integer               32  bits
@@ -307,7 +307,7 @@ const
       stackal     =        4;  { alignment of stack }
       stackelsize =        4;  { stack element size }
       maxsize     =       32;  { this is the largest type that can be on the stack }
-      { Heap alignment should be either the natural word alignment of the 
+      { Heap alignment should be either the natural word alignment of the
         machine, or the largest object needing alignment that will be allocated.
         It can also be used to enforce minimum block allocation policy. }
       heapal      =        4;  { alignment for each heap arena }
@@ -327,7 +327,7 @@ const
 
       { internal constants }
 
-      { !!! Need to use the small size memory to self compile, otherwise, by 
+      { !!! Need to use the small size memory to self compile, otherwise, by
         definition, pint cannot fit into its own memory. }
       {elide}maxstr      = 16777215;{noelide}  { maximum size of addressing for program/var }
       {remove maxstr     =  2000000; remove}  { maximum size of addressing for program/var }
@@ -358,7 +358,7 @@ const
       prdfn      = 3;        { 'prd' file no. }
       prrfn      = 4;        { 'prr' file no. }
 
-      { Mark element offsets 
+      { Mark element offsets
 
         Mark format is:
 
@@ -402,15 +402,15 @@ const
         blocks, but only if we don't recycle them, because this moves the header
         information around. It is "limited" because there is nothing to prevent
         the program from holding the address of a data item within the block
-        past a dispose. }                      
-      dochkrpt    = false;    { check reuse of freed entry (automatically 
+        past a dispose. }
+      dochkrpt    = false;    { check reuse of freed entry (automatically
                                 invokes dorecycl = false }
 
       { version numbers }
-    
+
       majorver   = 1; { major version number }
       minorver   = 2; { minor version number }
-                
+
 type
       { These equates define the instruction layout. I have choosen a 32 bit
         layout for the instructions defined by (4 bit) digit:
@@ -506,15 +506,15 @@ var r: record case boolean of
        end;
     i: 1..intsize;
 
-begin 
+begin
 
    for i := 1 to intsize do r.b[i] := store[a+i-1];
 
-   getint := r.i 
+   getint := r.i
 
 end;
 
-procedure putint(a: address; x: integer); 
+procedure putint(a: address; x: integer);
 
 var r: record case boolean of
 
@@ -524,7 +524,7 @@ var r: record case boolean of
        end;
     i: 1..intsize;
 
-begin 
+begin
 
    r.i := x;
    for i := 1 to intsize do store[a+i-1] := r.b[i]
@@ -544,7 +544,7 @@ var r: record case boolean of
 begin
 
    for i := 1 to realsize do r.b[i] := store[a+i-1];
-   getrel := r.r 
+   getrel := r.r
 
 end;
 
@@ -597,7 +597,7 @@ var r: record case boolean of
 begin
 
    for i := 1 to setsize do r.b[i] := store[a+i-1];
-   s := r.s 
+   s := r.s
 
 end;
 
@@ -647,7 +647,7 @@ var r: record case boolean of
 begin
 
    for i := 1 to adrsize do r.b[i] := store[a+i-1];
-   getadr := r.a 
+   getadr := r.a
 
 end;
 
@@ -734,7 +734,7 @@ begin
    ads := ad;
    op := store[ad]; ad := ad+1;
    if insp[op] then begin p := store[ad]; ad := ad+1 end;
-   if insq[op] > 0 then begin 
+   if insq[op] > 0 then begin
 
       case insq[op] of
 
@@ -742,7 +742,7 @@ begin
          intsize:  q := getint(ad);
 
       end;
-      ad := ad+insq[op] 
+      ad := ad+insq[op]
 
    end;
    write(': ');
@@ -755,7 +755,7 @@ begin
 
    end else if insq[op] > 0 then begin write('   '); wrthex(q, maxdigh) end
 
-end; 
+end;
 
 { dump contents of instruction memory }
 
@@ -780,7 +780,7 @@ begin
    end;
    writeln
 
-end; 
+end;
 
 { align address, upwards }
 
@@ -821,7 +821,7 @@ procedure load;
    begin for i := 0 to maxins do instr[i] := '          ';
          {
 
-           Notes: 
+           Notes:
 
            1. Instructions marked with "*" are for internal use only.
               The "*" mark both shows in the listing, and also prevents
@@ -833,11 +833,11 @@ procedure load;
               assigned to other instructions if the space is needed.
 
          }
-         instr[  0]:='lodi      '; insp[  0] := true;  insq[  0] := intsize;     
+         instr[  0]:='lodi      '; insp[  0] := true;  insq[  0] := intsize;
          instr[  1]:='ldoi      '; insp[  1] := false; insq[  1] := intsize;
-         instr[  2]:='stri      '; insp[  2] := true;  insq[  2] := intsize;     
+         instr[  2]:='stri      '; insp[  2] := true;  insq[  2] := intsize;
          instr[  3]:='sroi      '; insp[  3] := false; insq[  3] := intsize;
-         instr[  4]:='lda       '; insp[  4] := true;  insq[  4] := intsize;     
+         instr[  4]:='lda       '; insp[  4] := true;  insq[  4] := intsize;
          instr[  5]:='lao       '; insp[  5] := false; insq[  5] := intsize;
          instr[  6]:='stoi      '; insp[  6] := false; insq[  6] := 0;
          instr[  7]:='ldc       '; insp[  7] := false; insq[  7] := intsize;
@@ -1069,7 +1069,7 @@ procedure load;
       writeln
 
    end;
-   
+
    procedure update(x: labelrg); (*when a label definition lx is found*)
       var curr,succ,ad: address; (*resp. current element and successor element
                                of a list of future references*)
@@ -1124,7 +1124,7 @@ procedure load;
       while again do
             begin if eof(prd) then errorl('unexpected eof on input  ');
                   getnxt;(* first character of line*)
-                  if not (ch in ['i', 'l', 'q', ' ', '!', ':']) then 
+                  if not (ch in ['i', 'l', 'q', ' ', '!', ':']) then
                     errorl('unexpected line start    ');
                   case ch of
                        'i': getlin;
@@ -1139,9 +1139,9 @@ procedure load;
                        ':': begin { source line }
 
                                read(prd,x); { get source line number }
-                               if dosrclin then begin 
+                               if dosrclin then begin
 
-                                  { pass source line register instruction } 
+                                  { pass source line register instruction }
                                   store[pc] := 174; pc := pc+1;
                                   putint(pc, x); pc := pc+intsize
 
@@ -1180,7 +1180,7 @@ procedure load;
 
       procedure getname;
       var i: alfainx;
-      begin 
+      begin
         if eof(prd) then errorl('unexpected eof on input  ');
         for i := 1 to maxalfa do word[i] := ' ';
         i := 1; { set 1st character of word }
@@ -1190,7 +1190,7 @@ procedure load;
           i := i+1; ch := ' ';
           if not eoln(prd) then read(prd,ch); { next character }
         end;
-        pack(word,1,name) 
+        pack(word,1,name)
       end; (*getname*)
 
       procedure storeop;
@@ -1227,13 +1227,13 @@ procedure load;
 
           (*lod,str,lda,lip*)
           0, 105, 106, 107, 108, 109,
-          2, 70, 71, 72, 73, 74,4,120: begin read(prd,p,q); storeop; storep; 
+          2, 70, 71, 72, 73, 74,4,120: begin read(prd,p,q); storeop; storep;
                                              storeq
                                        end;
 
-          { [sam] There is a compiler bug with reads to restricted range 
+          { [sam] There is a compiler bug with reads to restricted range
             variables in IP Pascal here. }
-          12(*cup*): begin read(prd,t{p}); p := t; labelsearch; storeop; 
+          12(*cup*): begin read(prd,t{p}); p := t; labelsearch; storeop;
                            storep; storeq
                      end;
 
@@ -1265,24 +1265,24 @@ procedure load;
           112,114: begin read(prd,p); labelsearch; storeop; storep; storeq end;
 
           15 (*csp*): begin skpspc; getname;
-                           while name<>sptable[q] do 
-                           begin q := q+1; if q > maxsp then 
-                                 errorl('std proc/func not found  ')
+                           while name<>sptable[q] do
+                           begin q := q+1; if q > maxsp then
+			     errorl('std proc/func not found  ');
                            end;
                            storeop; storeq
                       end;
 
           7, 123, 124, 125, 126, 127 (*ldc*): begin case op of  (*get q*)
-                           123: begin read(prd,i); storeop; 
-                                      if pc+intsize > cp then 
+                           123: begin read(prd,i); storeop;
+                                      if pc+intsize > cp then
                                          errorl('Program code overflow    ');
                                       putint(pc, i); pc := pc+intsize
                                 end;
 
-                           124: begin read(prd,r); 
+                           124: begin read(prd,r);
                                       cp := cp-realsize;
                                       alignd(realal, cp);
-                                      if cp <= 0 then 
+                                      if cp <= 0 then
                                          errorl('constant table overflow  ');
                                       putrel(cp, r); q := cp;
                                       storeop; storeq
@@ -1290,8 +1290,8 @@ procedure load;
 
                            125: storeop; (*p,q = 0*)
 
-                           126: begin read(prd,q); storeop; 
-                                      if pc+1 > cp then 
+                           126: begin read(prd,q); storeop;
+                                      if pc+1 > cp then
                                         errorl('Program code overflow    ');
                                       putbol(pc, q <> 0); pc := pc+1 end;
 
@@ -1303,12 +1303,12 @@ procedure load;
                                   getnxt;
                                   if ch <> '''' then
                                     errorl('illegal character        ');
-                                  storeop; 
-                                  if pc+1 > cp then 
+                                  storeop;
+                                  if pc+1 > cp then
                                     errorl('Program code overflow    ');
                                   putchr(pc, c); pc := pc+1
                                 end;
-                           7: begin skpspc; 
+                           7: begin skpspc;
                                    if ch <> '(' then errorl('ldc() expected           ');
                                    s := [ ];  getnxt;
                                    while ch<>')' do
@@ -1330,11 +1330,11 @@ procedure load;
                          if op = 95 then q := lb
                          else
                          begin
-                           cp := cp-intsize; 
+                           cp := cp-intsize;
                            alignd(intal, cp);
                            if cp <= 0 then errorl('constant table overflow  ');
                            putint(cp, ub);
-                           cp := cp-intsize; 
+                           cp := cp-intsize;
                            alignd(intal, cp);
                            if cp <= 0 then errorl('constant table overflow  ');
                            putint(cp, lb); q := cp
@@ -1363,7 +1363,7 @@ procedure load;
                          if cp <= 0 then errorl('constant table overflow  ');
                          q := cp;
                          for x := 1 to l do putchr(q+x-1, str[x]);
-                         { this should have worked, the for loop is faulty 
+                         { this should have worked, the for loop is faulty
                            because the calculation for end is done after the i
                            set
                          for i := 0 to i-1 do putchr(q+i, str[i+1]);
@@ -1386,7 +1386,7 @@ procedure load;
           6, 80, 81, 82, 83, 84, (*sto*)
 
           { eof,adi,adr,sbi,sbr,sgs,flt,flo,trc,ngi,ngr,sqi,sqr,abi,abr,not,and,
-            ior,dif,int,uni,inn,mod,odd,mpi,mpr,dvi,dvr,stp,chr,rnd,rgs,fbv, 
+            ior,dif,int,uni,inn,mod,odd,mpi,mpr,dvi,dvr,stp,chr,rnd,rgs,fbv,
             fvb }
           27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,
           48,49,50,51,52,53,54,58,60,62,110,111,
@@ -1419,9 +1419,9 @@ begin (*load*)
       writeln;
       write('Program     '); wrthex(0, maxdigh); write('-'); wrthex(pctop-1, maxdigh);
       writeln(' (',pctop:maxdigd,')');
-      write('Stack/Heap  '); wrthex(pctop, maxdigh); write('-'); wrthex(cp-1, maxdigh); 
+      write('Stack/Heap  '); wrthex(pctop, maxdigh); write('-'); wrthex(cp-1, maxdigh);
       writeln(' (',cp-pctop+1:maxdigd,')');
-      write('Constants   '); wrthex(cp, maxdigh); write('-'); wrthex(maxstr, maxdigh); 
+      write('Constants   '); wrthex(cp, maxdigh); write('-'); wrthex(maxstr, maxdigh);
       writeln(' (',maxstr-(cp):maxdigd,')');
       writeln
 
@@ -1454,7 +1454,7 @@ begin
       write(' mp = '); wrthex(mp, maxdigh);
       write(' np = '); wrthex(np, maxdigh);
       write(' cp = '); wrthex(cp, maxdigh);
-      writeln; 
+      writeln;
       write('------------------------------------------------------------');
       writeln('-------------');
 
@@ -1514,10 +1514,10 @@ begin
      else if fa = pctop+prroff then ff := prrfn
      else begin
        i := 5; { start search after the header files }
-       ff := 0; 
-       while i <= maxfil do begin 
+       ff := 0;
+       while i <= maxfil do begin
          if filstate[i] = fclosed then begin ff := i; i := maxfil end;
-         i := i+1 
+         i := i+1
        end;
        if ff = 0 then errori('To many files            ');
      end;
@@ -1591,7 +1591,7 @@ begin
    ad := np; { index the bottom of heap }
    while ad < cp do begin
       l := getadr(ad); { get next block length }
-      write('addr: '); wrthex(ad, maxdigh); write(': ', abs(l):6, ': '); 
+      write('addr: '); wrthex(ad, maxdigh); write(': ', abs(l):6, ': ');
       if l >= 0 then writeln('free') else writeln('alloc');
       ad := ad+abs(l)
    end
@@ -1612,7 +1612,7 @@ begin
   if b > 0 then begin { block was found }
      putadr(b, -(len+adrsize)); { allocate block }
      blk := b+adrsize; { set base address }
-     if l > len+adrsize+adrsize+resspc then begin 
+     if l > len+adrsize+adrsize+resspc then begin
         { If there is enough room for the block, header, and another header,
           then a reserve factor if desired. }
         b := b+len+adrsize; { go to top of allocated block }
@@ -1629,7 +1629,7 @@ var done: boolean;
 begin
    { first, colapse all free blocks at the heap bottom }
    done := false;
-   while not done and (np < cp) do begin 
+   while not done and (np < cp) do begin
       l := getadr(np); { get header length }
       if l >= 0 then np := np+getadr(np) { free, skip block }
       else done := true { end }
@@ -1642,7 +1642,7 @@ begin
          ad1 := ad+l; { index next block }
          if ad1 < cp then begin { not against end }
             l1 := getadr(ad1); { get length next }
-            if l1 >=0 then 
+            if l1 >=0 then
                putadr(ad, l+l1) { both blocks are free, combine the blocks }
             else ad := ad+l+abs(l1) { skip both blocks }
          end else ad := ad+l+abs(l1) { skip both blocks }
@@ -1666,7 +1666,7 @@ begin
      putadr(ad, -(len+adrsize)); { allocate block }
      blk := ad+adrsize { index start of block }
   end
-end; 
+end;
 
 { dispose of space in heap }
 
@@ -1737,10 +1737,10 @@ procedure callsp;
 
 begin (*callsp*)
       if q > maxsp then errori('invalid std proc/func    ');
-        
+
       { trace routine executions }
       if dotrcrot then writeln(pc:6, '/', sp:6, '-> ', q:2);
-      
+
       case q of
            0 (*get*): begin popadr(ad); valfil(ad); fn := store[ad];
                            if fn <= prrfn then case fn of
@@ -1803,7 +1803,7 @@ begin (*callsp*)
                                 writeln(filtable[fn])
                            end
                       end;
-           6 (*wrs*): begin popint(l); popint(w); popadr(ad1); 
+           6 (*wrs*): begin popint(l); popint(w); popadr(ad1);
                            popadr(ad); pshadr(ad); valfil(ad); fn := store[ad];
                            if fn <= prrfn then case fn of
                               inputfn: errori('write on input file      ');
@@ -1824,13 +1824,13 @@ begin (*callsp*)
                                  prrfn: errori('eoln on prr file         ')
                               end
                            else begin
-                                if filstate[fn] <> fread then 
+                                if filstate[fn] <> fread then
                                    errori('File not in read mode    ');
                                 line:=eoln(filtable[fn])
                            end;
                            pshint(ord(line))
                       end;
-           8 (*wri*): begin popint(w); popint(i); popadr(ad); pshadr(ad); 
+           8 (*wri*): begin popint(w); popint(i); popadr(ad); pshadr(ad);
                             valfil(ad); fn := store[ad];
                            if fn <= prrfn then case fn of
                                  inputfn: errori('write on input file      ');
@@ -1844,7 +1844,7 @@ begin (*callsp*)
                                 write(filtable[fn], i:w)
                            end
                       end;
-           9 (*wrr*): begin popint(w); poprel(r); popadr(ad); pshadr(ad); 
+           9 (*wrr*): begin popint(w); poprel(r); popadr(ad); pshadr(ad);
                             valfil(ad); fn := store[ad];
                            if fn <= prrfn then case fn of
                                  inputfn: errori('write on input file      ');
@@ -1858,7 +1858,7 @@ begin (*callsp*)
                                 write(filtable[fn], r:w)
                            end;
                       end;
-           10(*wrc*): begin popint(w); popint(i); c := chr(i); popadr(ad); 
+           10(*wrc*): begin popint(w); popint(i); c := chr(i); popadr(ad);
                             pshadr(ad); valfil(ad); fn := store[ad];
                            if fn <= prrfn then case fn of
                                  inputfn: errori('write on input file      ');
@@ -1872,7 +1872,7 @@ begin (*callsp*)
                                 write(filtable[fn], c:w)
                            end
                       end;
-           11(*rdi*): begin popadr(ad1); popadr(ad); pshadr(ad); valfil(ad); 
+           11(*rdi*): begin popadr(ad1); popadr(ad); pshadr(ad); valfil(ad);
                             fn := store[ad];
                            if fn <= prrfn then case fn of
                                  inputfn: begin readi(input, i); putint(ad1, i) end;
@@ -1884,10 +1884,10 @@ begin (*callsp*)
                                 if filstate[fn] <> fread then
                                    errori('File not in read mode    ');
                                 readi(filtable[fn], i);
-                                putint(ad1, i) 
+                                putint(ad1, i)
                            end
                       end;
-           12(*rdr*): begin popadr(ad1); popadr(ad); pshadr(ad); valfil(ad); 
+           12(*rdr*): begin popadr(ad1); popadr(ad); pshadr(ad); valfil(ad);
                             fn := store[ad];
                            if fn <= prrfn then case fn of
                                  inputfn: begin readr(input, r); putrel(ad1, r) end;
@@ -1902,7 +1902,7 @@ begin (*callsp*)
                                 putrel(ad1, r)
                            end
                       end;
-           13(*rdc*): begin popadr(ad1); popadr(ad); pshadr(ad); valfil(ad); 
+           13(*rdc*): begin popadr(ad1); popadr(ad); pshadr(ad); valfil(ad);
                             fn := store[ad];
                            if fn <= prrfn then case fn of
                                  inputfn: begin readc(input, c); putchr(ad1, c) end;
@@ -1944,7 +1944,7 @@ begin (*callsp*)
                                 outputfn: errori('reset on output file     ');
                                 prdfn: reset(prd);
                                 prrfn: errori('reset on prr file        ')
-                              end 
+                              end
                            else begin
                                 filstate[fn] := fread;
                                 reset(filtable[fn]);
@@ -1956,20 +1956,20 @@ begin (*callsp*)
                                 outputfn: errori('rewrite on output file   ');
                                 prdfn: errori('rewrite on prd file      ');
                                 prrfn: rewrite(prr)
-                              end 
+                              end
                            else begin
                                 filstate[fn] := fwrite;
                                 rewrite(filtable[fn]);
                            end
                       end;
-           24(*wrb*): begin popint(w); popint(i); b := i <> 0; popadr(ad); 
+           24(*wrb*): begin popint(w); popint(i); b := i <> 0; popadr(ad);
                             pshadr(ad); valfil(ad); fn := store[ad];
                            if fn <= prrfn then case fn of
                                  inputfn: errori('write on input file      ');
                                  outputfn: write(output, b:w);
                                  prdfn: errori('write on prd file        ');
                                  prrfn: write(prr, b:w)
-                              end 
+                              end
                            else begin
                                 if filstate[fn] <> fwrite then
                                    errori('File not in write mode   ');
@@ -1983,11 +1983,11 @@ begin (*callsp*)
                                  outputfn: write(output, r:w:f);
                                  prdfn: errori('write on prd file        ');
                                  prrfn: write(prr, r:w:f)
-                              end 
+                              end
                            else begin
                                 if filstate[fn] <> fwrite then
                                    errori('File not in write mode   ');
-                                write(filtable[fn], r:w:f) 
+                                write(filtable[fn], r:w:f)
                            end
                       end;
            26(*dsp*): begin
@@ -2006,19 +2006,19 @@ begin (*callsp*)
                                write(bfiltable[fn], store[sp-intsize+i-1]);
                             popint(i)
                       end;
-           29(*wbr*): begin poprel(r); popadr(ad); pshadr(ad); pshrel(r); 
+           29(*wbr*): begin poprel(r); popadr(ad); pshadr(ad); pshrel(r);
                             valfilwm(ad); fn := store[ad];
-                            for i := 1 to realsize do 
+                            for i := 1 to realsize do
                                write(bfiltable[fn], store[sp-realsize+i-1]);
                             poprel(r)
                       end;
-           30(*wbc*): begin popint(i); c := chr(i); popadr(ad); pshadr(ad); pshint(i); 
+           30(*wbc*): begin popint(i); c := chr(i); popadr(ad); pshadr(ad); pshint(i);
                             valfilwm(ad); fn := store[ad];
                             for i := 1 to charsize do
                                write(bfiltable[fn], store[sp-intsize+i-1]);
                             popint(i)
                       end;
-           31(*wbb*): begin popint(i); popadr(ad); pshadr(ad); pshint(i); 
+           31(*wbb*): begin popint(i); popadr(ad); pshadr(ad); pshint(i);
                             valfilwm(ad); fn := store[ad];
                             for i := 1 to boolsize do
                                write(bfiltable[fn], store[sp-intsize+i-1]);
@@ -2065,6 +2065,12 @@ begin (* main *)
   writeln('P5 Pascal interpreter vs. ', majorver:1, '.', minorver:1);
   writeln;
 
+  {$ifdef fpc}
+  writeln('--- assigning filenames ----------------');
+  assign(prr, 'prr.txt');
+  assign(prd, 'prd.txt');
+  {$endif}
+
   { !!! remove this next statement for self compile }
   {elide}rewrite(prr);{noelide}
 
@@ -2086,7 +2092,7 @@ begin (* main *)
     (*execute*)
 
     { trace executed instructions }
-    if dotrcins then begin 
+    if dotrcins then begin
 
        wrthex(pcs, maxdigh);
        write('/');
@@ -2115,7 +2121,7 @@ begin (* main *)
           70 (*stra*): begin getp; getq; popadr(ad); putadr(base(p)+q, ad) end;
           71 (*strr*): begin getp; getq; poprel(r1); putrel(base(p)+q, r1) end;
           72 (*strs*): begin getp; getq; popset(s1); putset(base(p)+q, s1) end;
-          73 (*strb*): begin getp; getq; popint(i1); b1 := i1 <> 0; 
+          73 (*strb*): begin getp; getq; popint(i1); b1 := i1 <> 0;
                              putbol(base(p)+q, b1) end;
           74 (*strc*): begin getp; getq; popint(i1); c1 := chr(i1);
                              putchr(base(p)+q, c1) end;
@@ -2134,9 +2140,9 @@ begin (* main *)
           80 (*stoa*): begin popadr(ad1); popadr(ad); putadr(ad, ad1) end;
           81 (*stor*): begin poprel(r1); popadr(ad); putrel(ad, r1) end;
           82 (*stos*): begin popset(s1); popadr(ad); putset(ad, s1) end;
-          83 (*stob*): begin popint(i1); b1 := i1 <> 0; popadr(ad); 
+          83 (*stob*): begin popint(i1); b1 := i1 <> 0; popadr(ad);
                              putbol(ad, b1) end;
-          84 (*stoc*): begin popint(i1); c1 := chr(i1); popadr(ad); 
+          84 (*stoc*): begin popint(i1); c1 := chr(i1); popadr(ad);
                              putchr(ad, c1) end;
 
           127 (*ldcc*): begin pshint(ord(getchr(pc))); pc := pc+1 end;
@@ -2292,25 +2298,25 @@ begin (* main *)
           24 (*fjp*): begin getq; popint(i); if i = 0 then pc := q end;
           25 (*xjp*): begin getq; popint(i1); pc := i1*ujplen+q end;
 
-          95 (*chka*): begin getq; popadr(a1); pshadr(a1); 
+          95 (*chka*): begin getq; popadr(a1); pshadr(a1);
                              {     0 = assign pointer including nil
                                Not 0 = assign pointer from heap address }
-                             if a1 = 0 then  
+                             if a1 = 0 then
                                 { if zero, but not nil, it's never been assigned }
                                 errori('uninitialized pointer    ')
                              else if (q <> 0) and (a1 = nilval) then
-                                { q <> 0 means deref, and it was nil 
+                                { q <> 0 means deref, and it was nil
                                   (which is not zero) }
                                 errori('Dereference of nil ptr   ')
-                             else if ((a1 < np) or (a1 >= cp)) and 
+                             else if ((a1 < np) or (a1 >= cp)) and
                                      (a1 <> nilval) then
-                                { outside heap space (which could have 
+                                { outside heap space (which could have
                                   contracted!) }
                                 errori('bad pointer value        ')
                              else if dochkrpt and (a1 <> nilval) then begin
                                 { perform use of freed space check }
                                 if isfree(a1) then
-                                   { attempt to dereference or assign a freed 
+                                   { attempt to dereference or assign a freed
                                      block }
                                    errori('Ptr used after dispose op')
                              end
@@ -2319,7 +2325,7 @@ begin (* main *)
           97 (*chks*): errori('Instruction error        ');
           98 (*chkb*),
           99 (*chkc*),
-          26 (*chki*): begin getq; popint(i1); pshint(i1); 
+          26 (*chki*): begin getq; popint(i1); pshint(i1);
                         if (i1 < getint(q)) or (i1 > getint(q+intsize)) then
                         errori('value out of range       ')
                       end;
@@ -2330,9 +2336,9 @@ begin (* main *)
                                prdfn: pshint(ord(eof(prd)));
                                outputfn,
                                prrfn: errori('eof test on output file  ')
-                            end else begin 
+                            end else begin
                                if filstate[fn] = fwrite then pshint(ord(true))
-                               else if filstate[fn] = fread then 
+                               else if filstate[fn] = fread then
                                   pshint(ord(eof(filtable[fn]) and not filbuff[fn]))
                                else errori('file is not open         ')
                             end
@@ -2356,11 +2362,11 @@ begin (* main *)
           40 (*abi*): begin popint(i1); pshint(abs(i1)) end;
           41 (*abr*): begin poprel(r1); pshrel(abs(r1)) end;
           42 (*not*): begin popint(i1); b1 := i1 <> 0; pshint(ord(not b1)) end;
-          43 (*and*): begin popint(i2); b2 := i2 <> 0; 
-                            popint(i1); b1 := i1 <> 0; 
+          43 (*and*): begin popint(i2); b2 := i2 <> 0;
+                            popint(i1); b1 := i1 <> 0;
                             pshint(ord(b1 and b2)) end;
-          44 (*ior*): begin popint(i2); b2 := i2 <> 0; 
-                            popint(i1); b1 := i1 <> 0; 
+          44 (*ior*): begin popint(i2); b2 := i2 <> 0;
+                            popint(i1); b1 := i1 <> 0;
                             pshint(ord(b1 or b2)) end;
           45 (*dif*): begin popset(s2); popset(s1); pshset(s1-s2) end;
           46 (*int*): begin popset(s2); popset(s1); pshset(s1*s2) end;
@@ -2370,10 +2376,10 @@ begin (* main *)
           50 (*odd*): begin popint(i1); pshint(ord(odd(i1))) end;
           51 (*mpi*): begin popint(i2); popint(i1); pshint(i1*i2) end;
           52 (*mpr*): begin poprel(r2); poprel(r1); pshrel(r1*r2) end;
-          53 (*dvi*): begin popint(i2); popint(i1); 
+          53 (*dvi*): begin popint(i2); popint(i1);
                             if i2 = 0 then errori('Zero divide              ');
                             pshint(i1 div i2) end;
-          54 (*dvr*): begin poprel(r2); poprel(r1); 
+          54 (*dvr*): begin poprel(r2); poprel(r1);
                             if r2 = 0.0 then errori('Zero divide              ');
                             pshrel(r1/r2) end;
           55 (*mov*): begin getq; popint(i2); popint(i1);
@@ -2451,7 +2457,7 @@ begin (* main *)
           116 (*fvb*): begin popint(i); popadr(ad); pshadr(ad); valfil(ad);
                       fn := store[ad];
                       { load buffer only if in read mode, and buffer is empty }
-                      if (filstate[fn] = fread) and not filbuff[fn] then begin 
+                      if (filstate[fn] = fread) and not filbuff[fn] then begin
                         for j := 1 to i do
                           read(bfiltable[fn], store[ad+fileidsize+j-1]);
                         filbuff[fn] := true
@@ -2468,8 +2474,8 @@ begin (* main *)
                         pshadr(i); pshadr(a1)
                       end;
 
-          174 (*mrkl*): begin getq; srclin := q; 
-                              if dotrcsrc then 
+          174 (*mrkl*): begin getq; srclin := q;
+                              if dotrcsrc then
                                 writeln('Source line executed: ', q:1)
                         end;
 
@@ -2482,7 +2488,7 @@ begin (* main *)
           220, 221, 222, 223, 224, 225, 226, 227, 228, 229,
           230, 231, 232, 233, 234, 235, 236, 237, 238, 239,
           240, 241, 242, 243, 244, 245, 246, 247, 248, 249,
-          250, 251, 252, 253, 254, 
+          250, 251, 252, 253, 254,
           255: errori('illegal instruction      ');
 
     end
